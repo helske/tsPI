@@ -52,7 +52,7 @@
 #'
 #' pred <- arima_pi(lh, order = c(3,0,0), n.ahead = 12)
 #'
-#' ts.plot(ts.union(lh,pred_arima, pred$uniform[,1:3]), col = c(1,2,2,2,3,3,3),
+#' ts.plot(ts.union(lh,pred_arima, pred[,1:3]), col = c(1,2,2,2,3,3,3),
 #' lty = c(1,1,2,2,1,2,2))
 arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
   prior = "uniform", custom_prior, custom_prior_args, nsim = 1000, last_only = FALSE, return_weights = FALSE, ...){
