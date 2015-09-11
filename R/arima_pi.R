@@ -169,11 +169,11 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
       }
       if (se_limits) {
         out[j, "se_lwr"] <-
-          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][j, 1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
-          (sum(nz_w * dnorm(x = out[[i]][j, 1], nz_ey, nz_sdy)/sqrt(nsim)))
+          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[j, 1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
+          (sum(nz_w * dnorm(x = out[j, 1], nz_ey, nz_sdy)/sqrt(nsim)))
         out[j, "se_upr"] <-
-          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][j, 2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
-          (sum(nz_w * dnorm(x = out[[i]][j, 2], nz_ey, nz_sdy)/sqrt(nsim)))
+          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[j, 2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
+          (sum(nz_w * dnorm(x = out[j, 2], nz_ey, nz_sdy)/sqrt(nsim)))
       }
     }
   } else stop("NA values in weights.")
