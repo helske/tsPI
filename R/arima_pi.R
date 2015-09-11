@@ -52,8 +52,7 @@
 #' ts.plot(ts.union(lh,pred_arima, pred$uniform[,1:3]), col = c(1,2,2,2,3,3,3),
 #' lty = c(1,1,2,2,1,2,2))
 arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
-  priors = c("uniform", "approx_joint_jeffreys", "approx_marginal_jeffreys", "exact_joint_jeffreys", "exact_marginal_jeffreys"),
-  custom_prior, custom_prior_args, nsim = 1000, last_only = FALSE, return_weights = FALSE, ...){
+  priors = "uniform", custom_prior, custom_prior_args, nsim = 1000, last_only = FALSE, return_weights = FALSE, ...){
 
   distfkt <- function(a, prob, ey, sdy, w){
     sum(w * pnorm(q = a, mean = ey, sd = sdy)) - prob
@@ -177,10 +176,10 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
           }
           if (se_limits) {
             out[[i]][j, "se_lwr"] <-
-              sqrt(sum((nz_w * (((1 - level) / 2) - pnorm(q = out[[i]][j, 1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
+              sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][j, 1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
               (sum(nz_w * dnorm(x = out[[i]][j, 1], nz_ey, nz_sdy)/sqrt(nsim)))
             out[[i]][j, "se_upr"] <-
-              sqrt(sum((nz_w * ((1 - (1 - level) / 2) - pnorm(q = out[[i]][j, 2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
+              sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][j, 2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
               (sum(nz_w * dnorm(x = out[[i]][j, 2], nz_ey, nz_sdy)/sqrt(nsim)))
           }
         }
@@ -205,10 +204,10 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
         }
         if (se_limits) {
           out[[i]]["se_lwr"] <-
-            sqrt(sum((nz_w * (((1 - level) / 2) - pnorm(q = out[[i]][1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
+            sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
             (sum(nz_w * dnorm(x = out[[i]][1], nz_ey, nz_sdy)/sqrt(nsim)))
           out[[i]]["se_upr"] <-
-            sqrt(sum((nz_w * ((1 - (1 - level) / 2) - pnorm(q = out[[i]][2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
+            sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
             (sum(nz_w * dnorm(x = out[[i]][2], nz_ey, nz_sdy)/sqrt(nsim)))
         }
 
