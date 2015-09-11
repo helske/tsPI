@@ -5,10 +5,9 @@
 \title{Compute Bayesian prediction intervals for ARIMA processes with exogenous variables using importance sampling}
 \usage{
 arima_pi(y, order, xreg = NULL, n.ahead = 1, level = 0.95,
-  median = TRUE, se_limits = TRUE, priors = c("uniform",
-  "approx_joint_jeffreys", "approx_marginal_jeffreys", "exact_joint_jeffreys",
-  "exact_marginal_jeffreys"), custom_prior, custom_prior_args, nsim = 1000,
-  last_only = FALSE, return_weights = FALSE, ...)
+  median = TRUE, se_limits = TRUE, prior = "uniform", custom_prior,
+  custom_prior_args, nsim = 1000, last_only = FALSE,
+  return_weights = FALSE, ...)
 }
 \arguments{
 \item{y}{vector containing the time series}
@@ -27,7 +26,10 @@ corresponding to the number of AR parameters, degree of differencing and number 
 
 \item{se_limits}{compute the standard errors of the prediction interval limits.}
 
-\item{priors}{priors to be used in importance sampling. Multiple choices are allowed. See \code{\link{jeffreys}} for details.}
+\item{prior}{prior to be used in importance sampling for AR and MA parameters.
+Defaults to uniform prior. Several Jeffreys' priors are also available (see \code{\link{jeffreys}} for details).
+If "custom", a user-defined custom prior is used (see next arguments).
+All priors assume that the ARMA parameters lie in stationarity/invertibility region.}
 
 \item{custom_prior}{function for computing custom prior.
 First argument must be a vector containing the AR and MA parameters (in that order).}
@@ -57,7 +59,7 @@ pred_arima <- cbind(pred = pred_arima$pred,
  lwr = pred_arima$pred - qnorm(0.975)*pred_arima$se^2,
  upr = pred_arima$pred + qnorm(0.975)*pred_arima$se^2)
 
-pred <- arima_pi(lh, order = c(3,0,0), n.ahead = 12, prior = "uniform")
+pred <- arima_pi(lh, order = c(3,0,0), n.ahead = 12)
 
 ts.plot(ts.union(lh,pred_arima, pred$uniform[,1:3]), col = c(1,2,2,2,3,3,3),
 lty = c(1,1,2,2,1,2,2))

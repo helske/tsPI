@@ -19,7 +19,10 @@
 #' @param level desired frequentist coverage probability of the prediction intervals.
 #' @param median compute the median of the prediction interval.
 #' @param se_limits compute the standard errors of the prediction interval limits.
-#' @param priors priors to be used in importance sampling. Multiple choices are allowed. See \code{\link{jeffreys}} for details.
+#' @param prior prior to be used in importance sampling for AR and MA parameters.
+#' Defaults to uniform prior. Several Jeffreys' priors are also available (see \code{\link{jeffreys}} for details).
+#' If "custom", a user-defined custom prior is used (see next arguments).
+#' All priors assume that the ARMA parameters lie in stationarity/invertibility region.
 #' @param custom_prior function for computing custom prior.
 #' First argument must be a vector containing the AR and MA parameters (in that order).
 #' @param custom_prior_args list containing additional arguments to \code{custom_prior}.
@@ -47,20 +50,23 @@
 #'  lwr = pred_arima$pred - qnorm(0.975)*pred_arima$se^2,
 #'  upr = pred_arima$pred + qnorm(0.975)*pred_arima$se^2)
 #'
-#' pred <- arima_pi(lh, order = c(3,0,0), n.ahead = 12, prior = "uniform")
+#' pred <- arima_pi(lh, order = c(3,0,0), n.ahead = 12)
 #'
 #' ts.plot(ts.union(lh,pred_arima, pred$uniform[,1:3]), col = c(1,2,2,2,3,3,3),
 #' lty = c(1,1,2,2,1,2,2))
 arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
-  priors = "uniform", custom_prior, custom_prior_args, nsim = 1000, last_only = FALSE, return_weights = FALSE, ...){
+  prior = "uniform", custom_prior, custom_prior_args, nsim = 1000, last_only = FALSE, return_weights = FALSE, ...){
 
   distfkt <- function(a, prob, ey, sdy, w){
     sum(w * pnorm(q = a, mean = ey, sd = sdy)) - prob
   }
 
-  priors <- match.arg(priors, several.ok = TRUE)
-  if (!missing(custom_prior))
-    priors <- c(priors, "custom")
+  prior <- match.arg(prior,
+    c("uniform", "approx_joint_jeffreys", "approx_marginal_jeffreys",
+      "exact_joint_jeffreys", "exact_marginal_jeffreys", "custom"))
+  if (prior == "custom" && missing(custom_prior))
+    stop("Missing custom prior.")
+
   n <- length(y)
   fit <- arima(y, order, xreg = xreg[1:n, ], ...)
   if (fit$code != 0 || sum(diag(fit$var.coef) < 1e-7) != 0)
@@ -111,9 +117,7 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
   m <- max(p, q + 1)
   nd <- (kd + 1):(kd + m)
 
-  w <- matrix(w, nsim, length(priors))
-  colnames(w) <- priors
-  for (i in which(w[, 1] > 0)) {
+  for (i in which(w)) {
     if (q > 0)
       model$R[(kd + 2):(kd + 1 + q)] <- psisim[i, (p + 1):npar]
     if (p > 0)
@@ -137,85 +141,45 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
       (((s2 / n) / sigma2hat)^(-0.5 * (n - k)) / sqrt(detVXinvX)) /
       exp(-0.5 * t(psisim[i,] - psihat) %*% psivarinv %*% (psisim[i, ] - psihat))
 
-    if("uniform" %in% priors)
-      w[i, "uniform"] <- weight
-    if("exact_joint_jeffreys" %in% priors)
-      w[i, "exact_joint_jeffreys"] <- weight * exact_joint_jeffreys(psisim[i, ], xreg, p, q, n)
-    if("exact_marginal_jeffreys" %in% priors)
-      w[i, "exact_marginal_jeffreys"] <- weight * exact_marginal_jeffreys(psisim[i, ], p, q, n)
-    if("approx_joint_jeffreys" %in% priors)
-      w[i, "approx_joint_jeffreys"] <- weight * approx_joint_jeffreys(psisim[i, ], xreg, p, q, n)
-    if("approx_marginal_jeffreys" %in% priors)
-      w[i, "approx_marginal_jeffreys"] <- weight * approx_marginal_jeffreys(psisim[i, ], p, q)
-    if("custom" %in% priors)
-      w[i, "custom"] <- weight * do.call(custom_prior, list(psisim[i, ], custom_prior_args))
+    w[i] <- weight * switch (prior,
+      uniform = 1,
+      exact_joint_jeffreys =  exact_joint_jeffreys(psisim[i, ], xreg, p, q, n),
+      exact_marginal_jeffreys = exact_marginal_jeffreys(psisim[i, ], p, q, n),
+      approx_joint_jeffreys = approx_joint_jeffreys(psisim[i, ], xreg, p, q, n),
+      approx_marginal_jeffreys = approx_marginal_jeffreys(psisim[i, ], p, q),
+      custom = do.call(custom_prior, list(psisim[i, ], custom_prior_args)))
   }
+  w <- w/sum(w)
+  out <- ts(matrix(NA, n.ahead, 2 + median + 2 * se_limits), end = end(model$y), frequency = frequency(model$y))
+  colnames(out) <- c(if (median) "median", "lwr", "upr", if (se_limits) c("se_lwr", "se_upr"))
 
-  out <- vector("list",length(priors))
-  names(out) <- priors
-  for (i in 1:length(priors)) {
-    w[, i] <- w[, i]/sum(w[, i])
-    if (!last_only) {
-      out[[i]] <- ts(matrix(0, n.ahead, 2 + median + 2 * se_limits), end = end(model$y), frequency = frequency(model$y))
-      colnames(out[[i]]) <- c(if (median) "median", "lwr", "upr", if (se_limits) c("se_lwr", "se_upr"))
-      if (sum(is.na(w[, i])) == 0)
-      {
-        nz_w <- w[w[, i] != 0, i]
-        for (j in 1:n.ahead)
-        {
-          nz_ey <- ey[j, w[, i] != 0]
-          nz_sdy <- sdy[j, w[, i] != 0]
-          interval <- c(mean(nz_ey) + c(-1, 1) * 8 * max(nz_sdy))
-          out[[i]][j, "lwr"] <- uniroot(distfkt, interval = interval, prob = (1 - level) / 2,
-            ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
-          out[[i]][j, "upr"] <- uniroot(distfkt,  interval = interval, prob = 1 - (1 - level) / 2,
-            ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
-          if (median) {
-            out[[i]][j, "median"] <- uniroot(distfkt,  interval = interval, prob = 0.5,
-              ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
-          }
-          if (se_limits) {
-            out[[i]][j, "se_lwr"] <-
-              sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][j, 1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
-              (sum(nz_w * dnorm(x = out[[i]][j, 1], nz_ey, nz_sdy)/sqrt(nsim)))
-            out[[i]][j, "se_upr"] <-
-              sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][j, 2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
-              (sum(nz_w * dnorm(x = out[[i]][j, 2], nz_ey, nz_sdy)/sqrt(nsim)))
-          }
-        }
+   if (sum(is.na(w)) == 0) {
+    nz_w <- w[w != 0]
+    for (j in 1:n.ahead) {
+      nz_ey <- ey[j, w != 0]
+      nz_sdy <- sdy[j, w != 0]
+      interval <- c(mean(nz_ey) + c(-1, 1) * 8 * max(nz_sdy))
+      out[j, "lwr"] <- uniroot(distfkt, interval = interval, prob = (1 - level) / 2,
+        ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
+      out[j, "upr"] <- uniroot(distfkt,  interval = interval, prob = 1 - (1 - level) / 2,
+        ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
+      if (median) {
+        out[j, "median"] <- uniroot(distfkt,  interval = interval, prob = 0.5,
+          ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
       }
-
-    } else {
-      out[[i]] <- ts(numeric(2 + median + 2 * se_limits), end = end(model$y), frequency = frequency(model$y))
-      names(out[[i]]) <- c(if (median) "median", "lwr", "upr", if (se_limits) c("se_lwr", "se_upr"))
-      if (sum(is.na(w[, i])) == 0)
-      {
-        nz_w <- w[w[, i] != 0, i]
-        nz_ey <- ey[w[, i] != 0]
-        nz_sdy <- sdy[w[, i] != 0]
-        interval <- c(mean(nz_ey) + c(-1, 1) * 8 * max(nz_sdy))
-        out[[i]]["lwr"] <- uniroot(distfkt, interval = interval, prob = (1 - level) / 2,
-          ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
-        out[[i]]["upr"] <- uniroot(distfkt,  interval = interval, prob = 1 - (1 - level) / 2,
-          ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
-        if (median) {
-          out[[i]]["median"] <- uniroot(distfkt,  interval = interval, prob = 0.5,
-            ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
-        }
-        if (se_limits) {
-          out[[i]]["se_lwr"] <-
-            sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
-            (sum(nz_w * dnorm(x = out[[i]][1], nz_ey, nz_sdy)/sqrt(nsim)))
-          out[[i]]["se_upr"] <-
-            sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
-            (sum(nz_w * dnorm(x = out[[i]][2], nz_ey, nz_sdy)/sqrt(nsim)))
-        }
-
+      if (se_limits) {
+        out[j, "se_lwr"] <-
+          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][j, 1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
+          (sum(nz_w * dnorm(x = out[[i]][j, 1], nz_ey, nz_sdy)/sqrt(nsim)))
+        out[j, "se_upr"] <-
+          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[[i]][j, 2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
+          (sum(nz_w * dnorm(x = out[[i]][j, 2], nz_ey, nz_sdy)/sqrt(nsim)))
       }
     }
-  }
+  } else stop("NA values in weights.")
+
+
   if (return_weights)
     out <- list(pred = out, weights = w)
-  out$fit <- fit
   out
 }
