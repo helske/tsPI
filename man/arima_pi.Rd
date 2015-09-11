@@ -2,7 +2,7 @@
 % Please edit documentation in R/arima_pi.R
 \name{arima_pi}
 \alias{arima_pi}
-\title{Compute prediction intervals for ARIMA processes with exogenous variables using importance sampling}
+\title{Compute Bayesian prediction intervals for ARIMA processes with exogenous variables using importance sampling}
 \usage{
 arima_pi(y, order, xreg = NULL, n.ahead = 1, level = 0.95,
   median = TRUE, se_limits = TRUE, priors = c("uniform",
@@ -46,8 +46,10 @@ First argument must be a vector containing the AR and MA parameters (in that ord
 a list containing the prediction intervals.
 }
 \description{
-Function \code{arima_pi} Computes prediction intervals for ARIMA processes
-with exogenous variables using importance sampling.
+Function \code{arima_pi} computes prediction intervals for ARIMA processes
+with exogenous variables using importance sampling. For regression coefficients,
+diffuse (uninformative) prior is used, whereas multiple options for
+prior distributions for ARMA coefficients are supported.
 }
 \examples{
 pred_arima <- predict(arima(lh, order = c(3,0,0)), n.ahead = 12, se.fit = TRUE)
@@ -57,7 +59,21 @@ pred_arima <- cbind(pred = pred_arima$pred,
 
 pred <- arima_pi(lh, order = c(3,0,0), n.ahead = 12, prior = "uniform")
 
-ts.plot(ts.union(lh,pred_arima, pred$uniform[,c(1,2,5)]), col = c(1,2,2,2,3,3,3),
-lty = c(1,1,2,2,2,2,1))
+ts.plot(ts.union(lh,pred_arima, pred$uniform[,1:3]), col = c(1,2,2,2,3,3,3),
+lty = c(1,1,2,2,1,2,2))
+}
+\references{
+\enumerate{
+\item{Helske, J. and Nyblom, J. (2013). Improved frequentist prediction
+intervals for autoregressive models by simulation.
+In Siem Jan Koopman and Neil Shephard, editors,
+Unobserved Components and Time Series Econometrics. Oxford University Press. In press.}
+ \item{Helske, J. and Nyblom, J. (2014). Improved frequentist prediction intervals for
+ ARMA models by simulation.
+ In Johan Knif and Bernd Pape, editors,
+Contributions to Mathematics, Statistics, Econometrics, and Finance:
+essays in honour of professor Seppo Pynnonen,
+number 296 in Acta Wasaensia, pages 71–86. University of Vaasa.}
+}
 }
 

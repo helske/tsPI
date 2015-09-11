@@ -23,11 +23,9 @@ MA coefficients differ in sign compared to \code{InformationMatrixARMA}.
 }
 \references{
 \enumerate{
-\item{Box and Jenkins (1970). Time Series Analysis: Forecasting and Control.}
-\item{A. I. McLeod, Ying Zhang (2007). Faster ARMA maximum likelihood estimation Computational Statistics & Data
+\item{Box, G. and Jenkins, G. (1970). Time Series Analysis: Forecasting and Control. San Francisco: Holden-Day.}
+\item{McLeod, A. I. and Zhang, Y., (2007). Faster ARMA maximum likelihood estimation Computational Statistics & Data
 Analysis 52(4) URL http://dx.doi.org/10.1016/j.csda.2007.07.020}
 }
-
-Box and Jenkins (1970). Time Series Analysis: Forecasting and Control.
 }
 

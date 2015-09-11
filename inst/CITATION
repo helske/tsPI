@@ -1,0 +1,38 @@
+c(
+bibentry(
+bibtype = "Manual",
+title = "{arimaPI}: Bayesian Prediction Intervals for ARIMA Processes",
+author = "Jouni Helske",
+year = sub("-.*", "", meta$Date),
+note = sprintf("R package version %s", meta$Version),
+url = "https://github.com/helske/arimaPI",
+key = "RarimaPI"
+),
+
+bibentry(
+bibtype = "Incollection",
+  author	= "Helske, J. and Nyblom, J.",
+	title	= "Improved frequentist prediction intervals for {ARMA} models by simulation",
+	booktitle = "Contributions to Mathematics, Statistics, Econometrics, and Finance :
+	            essays in honour of professor Seppo Pynnönen",
+	publisher= "University of Vaasa",
+	editor	= "Knif, J. and Pape, B.",
+	number	= "296",
+	series	= "Acta Wasaensia",
+	pages	= "71--86",
+	year	= "2014",
+  key = "arPI"
+),
+
+bibentry(
+bibtype = "Incollection",
+  author	= "Helske, J. and Nyblom, J.",
+	title	= "Improved Frequentist Prediction Intervals for Autoregressive Models by Simulation",
+	booktitle= "Unobserved Components and Time Series Econometrics",
+	publisher= "Oxford University Press",
+	editor	= "Koopman, S. J. and Shephard, N.",
+	year = "2015",
+	note	= "In press",
+	key = "arimaPI"
+)
+)

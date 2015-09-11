@@ -5,5 +5,7 @@ Date: 2015-09-11
 Author: Jouni Helske
 Maintainer: Jouni Helske <jouni.helske@jyu.fi>
 Imports: KFAS
-Description: Package arimaPI computes prediction intervals for ARIMA processes with exogenous variables which take account the parameter uncertainty, leading to more precise coverage probabilities in frequentist sense. Method uses importance sampling and root solving based on the predicted values and prediction errors.
-License: GPL (>= 2)
+Description: Bayesian prediction intervals for ARIMA processes with exogenous variables which take account the parameter uncertainty, leading to more accurate coverage probabilities in frequentist sense. Method uses importance sampling and root solving based on the predicted values and prediction errors.
+License: GPL-3
+NeedsCompilation: yes
+Encoding: UTF-8
