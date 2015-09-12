@@ -30,7 +30,9 @@ approx_joint_jeffreys<-function(psi, xreg = NULL, p, q, n){
     } else sqrt_det*sqrt(sum(solve(toeplitz(acv_arma(phi, theta, n = n)), matrix(1,nrow = n))))
   }  else 0
 }
+#' @export
 #' @rdname priors
+#'
 approx_marginal_jeffreys<-function(psi, p, q){
   # Large sample approximation for Jeffreys marginal prior p(psi) =
   # sqrt(|I(psi)|), where I is the large sample approximation of information matrix
@@ -41,6 +43,7 @@ approx_marginal_jeffreys<-function(psi, p, q){
     prod(diag(chol_im))
   } else 0
 }
+#' @export
 #' @rdname priors
 exact_joint_jeffreys<-function(psi, xreg = NULL, p, q, n){
   # Exact Jeffreys's joint prior
@@ -60,13 +63,14 @@ exact_joint_jeffreys<-function(psi, xreg = NULL, p, q, n){
   for(i in 1:(p+q))
     for(j in 1:(p+q))
       informationMatrixPsi[i,j]<-sum((invV %*% dVMatrices[[i]]%*%invV %*% dVMatrices[[j]])[dx])
+
   if(!is.null(xreg)){
     sqrt(det(t(cbind(1,xreg))%*%invV%*%cbind(1,xreg))*
-           det(informationMatrixPsi-1/(2*n)*informationMatrixPsiSigma%*%informationMatrixPsiSigma))
+        det(informationMatrixPsi-1/(2*n)*informationMatrixPsiSigma%*%informationMatrixPsiSigma))
   } else sqrt(matrix(1,ncol=n)%*%invV%*%matrix(1,nrow=n)*
-                det(informationMatrixPsi-1/(2*n)*informationMatrixPsiSigma%o%informationMatrixPsiSigma))
+      det(informationMatrixPsi-1/(2*n)*informationMatrixPsiSigma%o%informationMatrixPsiSigma))
 }
-
+#' @export
 #' @rdname priors
 exact_marginal_jeffreys <- function(psi, p , q, n){
   # Exact Jeffreys's marginal prior

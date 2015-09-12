@@ -2,8 +2,13 @@
 
 export(acv_arma)
 export(approx_joint_jeffreys)
+export(approx_marginal_jeffreys)
 export(arima_pi)
+export(avg_coverage_arima)
 export(dacv_arma)
+export(exact_joint_jeffreys)
+export(exact_marginal_jeffreys)
 export(information_arma)
+export(struct_pi)
 import(KFAS)
 useDynLib(arimaPI, .registration=TRUE)

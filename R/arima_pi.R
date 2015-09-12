@@ -9,13 +9,13 @@
 #' @import KFAS
 #' @name arima_pi
 #
-#' @param y vector containing the time series
+#' @param x vector containing the time series
 #' @param xreg matrix or data frame containing the exogenous variables
 #' (not including the intercept which is always included for non-differenced series)
 #' @param order vector of length 3 with values p,d,q
 #' corresponding to the number of AR parameters, degree of differencing and number of MA parameters.
 #' @param nsim number of simulations used in importance sampling.
-#' @param n.ahead length of the forecast horizon.
+#' @param n_ahead length of the forecast horizon.
 #' @param level desired frequentist coverage probability of the prediction intervals.
 #' @param median compute the median of the prediction interval.
 #' @param se_limits compute the standard errors of the prediction interval limits.
@@ -45,20 +45,24 @@
 #' }
 #' @examples
 #'
-#' pred_arima <- predict(arima(lh, order = c(3,0,0)), n.ahead = 12, se.fit = TRUE)
+#' set.seed(123)
+#' x <- arima.sim(n = 30, model = list(ar = 0.9))
+#'
+#' pred_arima <- predict(arima(x, order = c(1,0,0)), n.ahead = 10, se.fit = TRUE)
 #' pred_arima <- cbind(pred = pred_arima$pred,
-#'  lwr = pred_arima$pred - qnorm(0.975)*pred_arima$se^2,
-#'  upr = pred_arima$pred + qnorm(0.975)*pred_arima$se^2)
+#'   lwr = pred_arima$pred - qnorm(0.975)*pred_arima$se,
+#'   upr = pred_arima$pred + qnorm(0.975)*pred_arima$se)
 #'
-#' pred <- arima_pi(lh, order = c(3,0,0), n.ahead = 12)
+#' pred <- arima_pi(x, order = c(1,0,0), n_ahead = 10)
 #'
-#' ts.plot(ts.union(lh,pred_arima, pred[,1:3]), col = c(1,2,2,2,3,3,3),
-#' lty = c(1,1,2,2,1,2,2))
-arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
+#' ts.plot(ts.union(x,pred_arima, pred[,1:3]), col = c(1,2,2,2,3,3,3),
+#'   lty = c(1,1,2,2,1,2,2))
+#'
+arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
   prior = "uniform", custom_prior, custom_prior_args, nsim = 1000, last_only = FALSE, return_weights = FALSE, ...){
 
-  distfkt <- function(a, prob, ey, sdy, w){
-    sum(w * pnorm(q = a, mean = ey, sd = sdy)) - prob
+  distfkt <- function(a, prob, ex, sdx, w){
+    sum(w * pnorm(q = a, mean = ex, sd = sdx)) - prob
   }
 
   prior <- match.arg(prior,
@@ -67,8 +71,8 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
   if (prior == "custom" && missing(custom_prior))
     stop("Missing custom prior.")
 
-  n <- length(y)
-  fit <- arima(y, order, xreg = xreg[1:n, ], ...)
+  n <- length(x)
+  fit <- arima(x, order, xreg = xreg[1:n, ], ...)
   if (fit$code != 0 || sum(diag(fit$var.coef) < 1e-7) != 0)
   {
     stop("arima function returned non-convergence or coefficient variances smaller than 1e-7.")
@@ -81,8 +85,9 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
   psihat <- as.numeric(fit$coef[1:npar])
   psivar <- matrix(fit$var.coef[1:npar, 1:npar], npar, npar)
   psivarchol <- try(t(chol(psivar)), TRUE)
-  if (class(psivarchol) == "try-error" || any(diag(psivarchol) < 1e-12))
+  if (inherits(psivarchol, "try-error") || any(diag(psivarchol) < 1e-12))
     stop("Covariance matrix fit$var.coef[1:npar, 1:npar] obtained from arima function is not positive definite.")
+  psivarinv <- crossprod(solve(psivarchol))
 
   psisim <- array(rnorm(n = nsim * npar),c(nsim, npar))
   for (i in 1:nsim)
@@ -101,17 +106,17 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
     w <- w * apply(matrix(abs(apply(cbind(rep(1, nsim), psisim[, (p + 1):(p + q)]),1, polyroot)) > 1, q, nsim), 2, sum) == q
   }
 
-  y <- c(y, rep(NA, n.ahead))
-  ey <- sdy <- matrix(0,n.ahead, nsim)
-  psivarinv <- crossprod(solve(t(psivarchol)))
+  x <- window(x, end = end(x) + c(0, n_ahead), extend = TRUE)
+  ex <- sdx <- matrix(0,n_ahead, nsim)
+
 
   valid <- which(w > 0)[1]
   valid_ar <- if (p > 0) psisim[valid, 1:p] else NULL
   valid_ma <- if ( q > 0) psisim[valid, (p + 1):(p + q)] else NULL
   if (is.null(xreg)) {
-    model <- SSModel(y ~ SSMarima(ar = valid_ar, ma = valid_ma, d = order[2], Q = 1), H = 0)
+    model <- SSModel(x ~ SSMarima(ar = valid_ar, ma = valid_ma, d = order[2], Q = 1), H = 0)
   } else {
-    model <- SSModel(y ~ xreg + SSMarima(ar = valid_ar, ma = valid_ma, d = order[2], Q = 1), H = 0)
+    model <- SSModel(x ~ xreg + SSMarima(ar = valid_ar, ma = valid_ma, d = order[2], Q = 1), H = 0)
   }
   kd <- k + d
   m <- max(p, q + 1)
@@ -132,8 +137,8 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
     } else s2 <- sum(c(out$v[1:n])^2/out$F[1:n])
 
     sigmasim[i] <-  sqrt(s2 * sigmasim[i])
-    ey[1:n.ahead,i] <- out$m[(n + 1):(n + n.ahead)]
-    sdy[1:n.ahead,i] <- sqrt(out$P_mu[(n + 1):(n + n.ahead)]) * sigmasim[i]
+    ex[1:n_ahead,i] <- out$m[(n + 1):(n + n_ahead)]
+    sdx[1:n_ahead,i] <- sqrt(out$P_mu[(n + 1):(n + n_ahead)]) * sigmasim[i]
 
     #s2 is replaced by (s2/n)/sigma2hat so that w>>0
     detVXinvX <- prod(c(out$Finf[out$Finf > 0], out$F[1:out$d][out$Finf == 0], out$F[(out$d + 1):n]))
@@ -150,30 +155,30 @@ arima_pi <- function(y, order, xreg = NULL, n.ahead = 1, level = 0.95, median = 
       custom = do.call(custom_prior, list(psisim[i, ], custom_prior_args)))
   }
   w <- w/sum(w)
-  out <- ts(matrix(NA, n.ahead, 2 + median + 2 * se_limits), end = end(model$y), frequency = frequency(model$y))
+  out <- ts(matrix(NA, n_ahead, 2 + median + 2 * se_limits), end = end(model$y), frequency = frequency(model$y))
   colnames(out) <- c(if (median) "median", "lwr", "upr", if (se_limits) c("se_lwr", "se_upr"))
 
-   if (sum(is.na(w)) == 0) {
+  if (sum(is.na(w)) == 0) {
     nz_w <- w[w != 0]
-    for (j in 1:n.ahead) {
-      nz_ey <- ey[j, w != 0]
-      nz_sdy <- sdy[j, w != 0]
-      interval <- c(mean(nz_ey) + c(-1, 1) * 8 * max(nz_sdy))
+    for (j in 1:n_ahead) {
+      nz_ex <- ex[j, w != 0]
+      nz_sdx <- sdx[j, w != 0]
+      interval <- c(mean(nz_ex) + c(-1, 1) * 8 * max(nz_sdx))
       out[j, "lwr"] <- uniroot(distfkt, interval = interval, prob = (1 - level) / 2,
-        ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
+        ex = nz_ex, sdx = nz_sdx,w = nz_w, tol = 1e-12)$root
       out[j, "upr"] <- uniroot(distfkt,  interval = interval, prob = 1 - (1 - level) / 2,
-        ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
+        ex = nz_ex, sdx = nz_sdx,w = nz_w, tol = 1e-12)$root
       if (median) {
         out[j, "median"] <- uniroot(distfkt,  interval = interval, prob = 0.5,
-          ey = nz_ey, sdy = nz_sdy,w = nz_w, tol = 1e-12)$root
+          ex = nz_ex, sdx = nz_sdx,w = nz_w, tol = 1e-12)$root
       }
       if (se_limits) {
         out[j, "se_lwr"] <-
-          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[j, 1], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
-          (sum(nz_w * dnorm(x = out[j, 1], nz_ey, nz_sdy)/sqrt(nsim)))
+          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[j, 1], nz_ex, nz_sdx)))^2) / (nsim - 1)) /
+          (sum(nz_w * dnorm(x = out[j, 1], nz_ex, nz_sdx)/sqrt(nsim)))
         out[j, "se_upr"] <-
-          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[j, 2], nz_ey, nz_sdy)))^2) / (nsim - 1)) /
-          (sum(nz_w * dnorm(x = out[j, 2], nz_ey, nz_sdy)/sqrt(nsim)))
+          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[j, 2], nz_ex, nz_sdx)))^2) / (nsim - 1)) /
+          (sum(nz_w * dnorm(x = out[j, 2], nz_ex, nz_sdx)/sqrt(nsim)))
       }
     }
   } else stop("NA values in weights.")
