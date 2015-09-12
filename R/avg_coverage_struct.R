@@ -77,11 +77,11 @@ avg_coverage_struct <- function(type = c("level", "trend", "BSM"), sds, n, n_ahe
       prior = prior, median = FALSE, se_limits = FALSE, ...), TRUE)
     if (!inherits(ipi, "try-error")) {
 
-      covprobs[, i, 2] <- pnorm(q = ipi[, "upr"], mean = true_pred[, "fit"], sd = true_pred[, "se.fit"]) -
-        pnorm(q = ipi[, "lwr"], mean = true_pred[, "fit"], sd = true_pred[, "se.fit"])
+      covprobs[, i, 2] <- pnorm(q = ipi[, "upr"], mean = true_pred[, "fit"], sd = sqrt(true_pred[,"se.fit"]^2 + sds[1]^2)) -
+        pnorm(q = ipi[, "lwr"], mean = true_pred[, "fit"], sd = sqrt(true_pred[,"se.fit"]^2 + sds[1]^2))
     }
-    covprobs[, i, 1] <- pnorm(q = pred[, 3],mean = true_pred[, "fit"], sd = true_pred[, "se.fit"]) -
-      pnorm(q = pred[, 2], mean = true_pred[, "fit"], sd = true_pred[, "se.fit"])
+    covprobs[, i, 1] <- pnorm(q = pred[, 3],mean = true_pred[, "fit"], sd = sqrt(true_pred[,"se.fit"]^2 + sds[1]^2)) -
+      pnorm(q = pred[, 2], mean = true_pred[, "fit"], sd = sqrt(true_pred[,"se.fit"]^2 + sds[1]^2))
 
   }
   if(!return_all_coverages){
