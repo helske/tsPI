@@ -18,7 +18,7 @@
 #' @param median compute the median of the prediction interval.
 #' @param se_limits compute the standard errors of the prediction interval limits.
 #' @param prior prior to be used in importance sampling for log-sd parameters.
-#' Defaults to uniform prior on logarithm of standard deviations.
+#' Defaults to uniform prior on logarithm of standard deviations (with constraints that all variances are smaller than 1e7).
 #' If "custom", a user-defined custom prior is used (see next arguments).
 #' @param custom_prior function for computing custom prior.
 #' First argument must be a vector containing the log-variance parameters.
@@ -93,8 +93,8 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
 
   likfn <- function(pars, model){
     # parameters are log(standard deviation)
-    model$Q[dx] <- exp(2 * pars[-npar])
-    model$H[1] <- exp(2 * pars[npar])
+    model$Q[dx] <- exp(2 * pars[-1])
+    model$H[1] <- exp(2 * pars[1])
     - logLik(model)
   }
   fit <- optim(fn = likfn, par = if (missing(inits)) log(rep(sd(x, na.rm = TRUE), npar)) else inits,
@@ -119,8 +119,8 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
 
 
   for (i in which(w)) {
-    model$Q[dx] <- exp(2 * psisim[i, -npar])
-    model$H[1] <- exp(2 * psisim[i, npar])
+    model$Q[dx] <- exp(2 * psisim[i, -1])
+    model$H[1] <- exp(2 * psisim[i, 1])
     out <- KFS(model, filtering = "mean", smoothing = "none")
 
     ex[1:n_ahead,i] <- out$m[(n + 1):(n + n_ahead)]

@@ -73,17 +73,17 @@ avg_coverage_arima <- function(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
       model$P1inf[1,1]<-0
       newdata$P1inf[1,1]<-0
     }
-    truepred<-predict(model,newdata=newdata,se=TRUE)
+    true_pred<-predict(model,newdata=newdata,se=TRUE)
 
 
-    ipi <- try(arima_pi(x,order=c(p,d,q),nsim=nsim,level = level, n_ahead=n_ahead,
-      prior = prior,custom_prior, custom_prior_args, median = FALSE, se_limits = FALSE, ...),TRUE)
+    ipi <- try(arima_pi(x,order=c(p,d,q),nsim = nsim,level = level, n_ahead = n_ahead,
+      prior = prior, median = FALSE, se_limits = FALSE, ...),TRUE)
     if(!inherits(ipi, "try-error")){
 
-      covprobs[, i,2] <- pnorm(q=ipi[,"upr"],mean=truepred[,"fit"], sd=truepred[,"se.fit"]) -
-        pnorm(q=ipi[,"lwr"],mean=truepred[,"fit"], sd=truepred[,"se.fit"])
+      covprobs[, i,2] <- pnorm(q=ipi[,"upr"],mean=true_pred[,"fit"], sd=true_pred[,"se.fit"]) -
+        pnorm(q=ipi[,"lwr"],mean=true_pred[,"fit"], sd=true_pred[,"se.fit"])
     }
-    covprobs[, i,1] <- pnorm(q=pred[,3],mean=truepred[,"fit"], sd=truepred[,"se.fit"]) - pnorm(q=pred[,2],mean=truepred[,"fit"], sd=truepred[,"se.fit"])
+    covprobs[, i,1] <- pnorm(q=pred[,3],mean=true_pred[,"fit"], sd=true_pred[,"se.fit"]) - pnorm(q=pred[,2],mean=true_pred[,"fit"], sd=true_pred[,"se.fit"])
 
   }
   if(!return_all_coverages){

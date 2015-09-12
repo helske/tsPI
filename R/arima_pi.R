@@ -59,7 +59,8 @@
 #'   lty = c(1,1,2,2,1,2,2))
 #'
 arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
-  prior = "uniform", custom_prior, custom_prior_args, nsim = 1000, last_only = FALSE, return_weights = FALSE, ...){
+  prior = "uniform", custom_prior, custom_prior_args  = NULL, nsim = 1000, last_only = FALSE,
+  return_weights = FALSE, arima_args = NULL){
 
   distfkt <- function(a, prob, ex, sdx, w){
     sum(w * pnorm(q = a, mean = ex, sd = sdx)) - prob
@@ -72,7 +73,7 @@ arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = 
     stop("Missing custom prior.")
 
   n <- length(x)
-  fit <- arima(x, order, xreg = xreg[1:n, ], ...)
+  fit <- do.call(arima, c(list(x, order, xreg = xreg[1:n, ]), arima_args))
   if (fit$code != 0 || sum(diag(fit$var.coef) < 1e-7) != 0)
   {
     stop("arima function returned non-convergence or coefficient variances smaller than 1e-7.")
