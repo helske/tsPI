@@ -46,7 +46,7 @@ avg_coverage_arima <- function(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
       if(inherits(fit, "try-error") || fit$code!=0 || sum(diag(fit$var.coef)<1e-7)!=0 ||
           ifelse(p>0,!all(Mod(polyroot(c(1, -fit$coef[1:p]))) > 1), FALSE))
       {
-        fit<-try(arima(x,order=c(p,d,q), method="ML",optim.control=list(maxit=1000)),TRUE)
+        fit<-try(arima(x,order=c(p,d,q), method = "ML",optim.control=list(maxit=1000)),TRUE)
         if(inherits(fit, "try-error") || fit$code!=0 || sum(diag(fit$var.coef)<1e-7)!=0 ||
             ifelse(p>0,!all(Mod(polyroot(c(1, -fit$coef[1:p]))) > 1),FALSE))
           fit<-NULL
