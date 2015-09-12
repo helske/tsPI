@@ -12,7 +12,7 @@
 #' (not including the intercept which is always included for non-differenced series)
 #' @param type type of model. Possible options are \code{"level"}, \code{"trend"} and \code{"BSM"},
 #' corresponding to local level, local linear trend, and local linear trend model with seasonal component.
-#' @param nsim number of simulations used in importance sampling.
+#' @param nsim number of simulations used in importance sampling. Default is 1000.
 #' @param n_ahead length of the forecast horizon.
 #' @param level desired frequentist coverage probability of the prediction intervals.
 #' @param median compute the median of the prediction interval.

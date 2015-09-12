@@ -33,6 +33,8 @@ avg_coverage_arima(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
 \item{custom_prior_args}{list containing additional arguments to \code{custom_prior}.}
 
 \item{return_all_coverages}{return raw results i.e. coverages for each simulations. When \code{FALSE} (default), summary statistics are returned.}
+
+\item{...}{Optional arguments to \code{\link{arima_pi}}.}
 }
 \value{
 a list containing the coverage probabilities

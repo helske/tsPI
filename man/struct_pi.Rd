@@ -6,7 +6,7 @@
 \usage{
 struct_pi(x, type = c("level", "trend", "BSM"), xreg = NULL, n_ahead = 1,
   level = 0.95, median = TRUE, se_limits = TRUE, prior = "uniform",
-  custom_prior, custom_prior_args, nsim = 10000, inits, last_only = FALSE,
+  custom_prior, custom_prior_args, nsim = 1000, inits, last_only = FALSE,
   return_weights = FALSE, ...)
 }
 \arguments{
@@ -27,7 +27,7 @@ corresponding to local level, local linear trend, and local linear trend model w
 \item{se_limits}{compute the standard errors of the prediction interval limits.}
 
 \item{prior}{prior to be used in importance sampling for log-sd parameters.
-Defaults to uniform prior.
+Defaults to uniform prior on logarithm of standard deviations.
 If "custom", a user-defined custom prior is used (see next arguments).}
 
 \item{custom_prior}{function for computing custom prior.
@@ -35,7 +35,7 @@ First argument must be a vector containing the log-variance parameters.}
 
 \item{custom_prior_args}{list containing additional arguments to \code{custom_prior}.}
 
-\item{nsim}{number of simulations used in importance sampling.}
+\item{nsim}{number of simulations used in importance sampling. Default is 1000.}
 
 \item{inits}{initial values for log-sds}
 

@@ -14,7 +14,7 @@
 #' (not including the intercept which is always included for non-differenced series)
 #' @param order vector of length 3 with values p,d,q
 #' corresponding to the number of AR parameters, degree of differencing and number of MA parameters.
-#' @param nsim number of simulations used in importance sampling.
+#' @param nsim number of simulations used in importance sampling. Default is 1000.
 #' @param n_ahead length of the forecast horizon.
 #' @param level desired frequentist coverage probability of the prediction intervals.
 #' @param median compute the median of the prediction interval.

@@ -36,7 +36,7 @@ First argument must be a vector containing the AR and MA parameters (in that ord
 
 \item{custom_prior_args}{list containing additional arguments to \code{custom_prior}.}
 
-\item{nsim}{number of simulations used in importance sampling.}
+\item{nsim}{number of simulations used in importance sampling. Default is 1000.}
 
 \item{last_only}{compute the prediction intervals only for the last prediction step.}
 
