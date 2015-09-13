@@ -1,6 +1,5 @@
 context("Testing arima_pi")
 
-set.seed(1)
 
 test_that("bogus arguments throw error",{
   x <- rnorm(10)
@@ -45,9 +44,9 @@ test_that("larger nsim gives smaller se",{
 test_that("arima_pi gives same results each time",{
   set.seed(1)
   pred <- arima_pi(lh, c(1, 0, 0), nsim = 50)
-  expect_equivalent(pred[1,"median"], 2.707872101)
-  expect_equivalent(pred[1,"lwr"], 1.809644512)
-  expect_equivalent(pred[1,"upr"], 3.606841626)
-  expect_equivalent(pred[1,"se_lwr"], 0.07736541451)
-  expect_equivalent(pred[1,"se_upr"], 0.01355272753)
+  expect_equal(pred[1,"median"], 2.707872101, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"lwr"], 1.809644512, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"upr"], 3.606841626, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"se_lwr"], 0.07736541451, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"se_upr"], 0.01355272753, tol = 1e-4, check.attributes = FALSE)
 })

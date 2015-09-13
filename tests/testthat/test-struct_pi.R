@@ -1,7 +1,5 @@
 context("Testing struct_pi")
 
-set.seed(1)
-
 test_that("bogus arguments throw error",{
   x <- rnorm(10)
   expect_error(struct_pi(x, type = "arima"))
@@ -44,10 +42,10 @@ test_that("larger nsim gives smaller se",{
 test_that("struct_pi gives same results each time",{
   set.seed(1)
   pred <- struct_pi(Nile, nsim = 50)
-  expect_equivalent(pred[1,"median"], 800.20719)
-  expect_equivalent(pred[1,"lwr"], 505.08147)
-  expect_equivalent(pred[1,"upr"], 1092.89858)
-  expect_equivalent(pred[1,"se_lwr"], 26.176364)
-  expect_equivalent(pred[1,"se_upr"], 5.3530965)
+  expect_equal(pred[1,"median"], 800.20719, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"lwr"], 505.08147, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"upr"], 1092.89858, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"se_lwr"], 26.176364, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"se_upr"], 5.3530965, tol = 1e-4, check.attributes = FALSE)
 
 })
