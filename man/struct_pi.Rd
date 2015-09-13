@@ -2,7 +2,7 @@
 % Please edit documentation in R/struct_pi.R
 \name{struct_pi}
 \alias{struct_pi}
-\title{Compute Bayesian prediction intervals for Structural Time Series with exogenous variables using importance sampling}
+\title{Prediction Intervals for Structural Time Series with Exogenous Variables Using Importance Sampling}
 \usage{
 struct_pi(x, type = c("level", "trend", "BSM"), xreg = NULL, n_ahead = 1,
   level = 0.95, median = TRUE, se_limits = TRUE, prior = "uniform",
@@ -69,5 +69,8 @@ In Siem Jan Koopman and Neil Shephard, editors,
 Unobserved Components and Time Series Econometrics. Oxford University Press. In press.}
  \item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis. In press.}
 }
+}
+\seealso{
+\code{\link{tsPI}}, \code{\link{arima_pi}}
 }
 

@@ -1,11 +1,10 @@
-#' Compute Bayesian prediction intervals for Structural Time Series with exogenous variables using importance sampling
+#' Prediction Intervals for Structural Time Series with Exogenous Variables Using Importance Sampling
 #'
 #' Function \code{struct_pi} computes prediction intervals for structural time series
 #' with exogenous variables using importance sampling.
 #'
 #'
 #' @export
-#' @import KFAS
 #' @name struct_pi
 #
 #' @param x vector containing the time series
@@ -28,6 +27,7 @@
 #' @param last_only compute the prediction intervals only for the last prediction step.
 #' @param return_weights Return (scaled) weights used in importance sampling.
 #' @return a list containing the prediction intervals.
+#' @seealso \code{\link{tsPI}}, \code{\link{arima_pi}}
 #'  @references
 #' \enumerate{
 #' \item{Helske, J. and Nyblom, J. (2013). Improved frequentist prediction

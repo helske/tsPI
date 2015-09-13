@@ -1,4 +1,4 @@
-#' Compute Bayesian prediction intervals for ARIMA processes with exogenous variables using importance sampling
+#' Prediction Intervals for ARIMA Processes with Exogenous Variables Using Importance Sampling
 #'
 #' Function \code{arima_pi} computes prediction intervals for ARIMA processes
 #' with exogenous variables using importance sampling. For regression coefficients,
@@ -6,7 +6,6 @@
 #' prior distributions for ARMA coefficients are supported.
 #'
 #' @export
-#' @import KFAS
 #' @name arima_pi
 #
 #' @param x vector containing the time series
@@ -29,7 +28,7 @@
 #' @param last_only compute the prediction intervals only for the last prediction step.
 #' @param return_weights Return (scaled) weights used in importance sampling.
 #' @param ... additional arguments for \code{\link{arima}}.
-#'
+#' @seealso \code{\link{tsPI}}, \code{\link{struct_pi}}
 #' @return a list containing the prediction intervals.
 #'  @references
 #' \enumerate{

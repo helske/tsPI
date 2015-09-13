@@ -2,7 +2,7 @@
 % Please edit documentation in R/arima_pi.R
 \name{arima_pi}
 \alias{arima_pi}
-\title{Compute Bayesian prediction intervals for ARIMA processes with exogenous variables using importance sampling}
+\title{Prediction Intervals for ARIMA Processes with Exogenous Variables Using Importance Sampling}
 \usage{
 arima_pi(x, order, xreg = NULL, n_ahead = 1, level = 0.95,
   median = TRUE, se_limits = TRUE, prior = "uniform", custom_prior,
@@ -80,5 +80,8 @@ Contributions to Mathematics, Statistics, Econometrics, and Finance:
 essays in honour of professor Seppo Pynnönen,
 number 296 in Acta Wasaensia, pages 71–86. University of Vaasa.}
 }
+}
+\seealso{
+\code{\link{tsPI}}, \code{\link{struct_pi}}
 }
 
