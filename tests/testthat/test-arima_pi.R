@@ -49,5 +49,5 @@ test_that("arima_pi gives same results each time",{
   expect_equivalent(pred[1,"lwr"], 1.809644512)
   expect_equivalent(pred[1,"upr"], 3.606841626)
   expect_equivalent(pred[1,"se_lwr"], 0.07736541451)
-  expect_equivalent(pred[1,"se_upr"], 0.01355272753)
+  expect_equivalent(pred[1,"se_upr"], 0.01355272753)
 })
