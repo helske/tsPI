@@ -4,7 +4,7 @@
 \alias{information_arma}
 \title{Large Sample Approximation of Information Matrix for ARMA process}
 \usage{
-information_arma(phi, theta)
+information_arma(phi = NULL, theta = NULL)
 }
 \arguments{
 \item{phi}{Autoregressive coefficients.}

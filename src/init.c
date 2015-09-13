@@ -6,7 +6,6 @@
 
 static R_FortranMethodDef FortEntries[] = {
 		{"fapproxinfmat", (DL_FUNC) &F77_SUB(approxinfmat), 4},
-		{"farmainvcov", (DL_FUNC) &F77_SUB(armainvcov), 7},
 		{"farcov", (DL_FUNC) &F77_SUB(arcov), 5},
 		{NULL, NULL, 0}
 };
