@@ -27,7 +27,6 @@
 #' @param inits initial values for log-sds
 #' @param last_only compute the prediction intervals only for the last prediction step.
 #' @param return_weights Return (scaled) weights used in importance sampling.
-#' @param ... Additional arguments for \code{arima}.
 #' @return a list containing the prediction intervals.
 #'  @references
 #' \enumerate{
@@ -55,7 +54,7 @@
 struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
   n_ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
   prior = "uniform", custom_prior, custom_prior_args, nsim = 1000, inits = NULL,
-  last_only = FALSE, return_weights = FALSE, ...){
+  last_only = FALSE, return_weights = FALSE){
 
   distfkt <- function(a, prob, ex, sdx, w){
     sum(w * pnorm(q = a, mean = ex, sd = sdx)) - prob

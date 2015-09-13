@@ -5,7 +5,7 @@
 #' @export
 #' @rdname priors
 #' @name jeffreys
-#' @useDynLib arimaPI, .registration=TRUE
+#' @useDynLib tsPI, .registration=TRUE
 #' @seealso \code{\link{arima_pi}}.
 #' @param psi vector containing the ar and ma parameters (in that order).
 #' @param xreg matrix or data frame containing the exogenous variables

@@ -6,8 +6,8 @@
 naive plug-in method and \code{\link{arima_pi}}}
 \usage{
 avg_coverage_arima(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
-  nsim2, nsim = 100, level = 0.95, prior = "uniform", custom_prior,
-  custom_prior_args, return_all_coverages = FALSE, ...)
+  nsim2, nsim = 100, level = 0.95, prior = "uniform",
+  return_all_coverages = FALSE, ...)
 }
 \arguments{
 \item{phi}{vector containing the AR parameters}
@@ -28,13 +28,9 @@ avg_coverage_arima(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
 
 \item{prior}{prior to be used in importance sampling. Multiple choices are allowed.}
 
-\item{custom_prior}{function for computing custom prior. First argument must be a vector containing the AR and MA parameters (in that order).}
-
-\item{custom_prior_args}{list containing additional arguments to \code{custom_prior}.}
-
 \item{return_all_coverages}{return raw results i.e. coverages for each simulations. When \code{FALSE} (default), summary statistics are returned.}
 
-\item{...}{Optional arguments to \code{\link{arima_pi}}.}
+\item{...}{additional arguments to \code{\link{arima_pi}}.}
 }
 \value{
 a list containing the coverage probabilities

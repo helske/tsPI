@@ -28,7 +28,8 @@
 #' @param custom_prior_args list containing additional arguments to \code{custom_prior}.
 #' @param last_only compute the prediction intervals only for the last prediction step.
 #' @param return_weights Return (scaled) weights used in importance sampling.
-#' @param ... Additional arguments for \code{arima}.
+#' @param ... additional arguments for \code{\link{arima}}.
+#'
 #' @return a list containing the prediction intervals.
 #'  @references
 #' \enumerate{
@@ -60,7 +61,7 @@
 #'
 arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
   prior = "uniform", custom_prior, custom_prior_args  = NULL, nsim = 1000, last_only = FALSE,
-  return_weights = FALSE, arima_args = NULL){
+  return_weights = FALSE, ...){
 
   distfkt <- function(a, prob, ex, sdx, w){
     sum(w * pnorm(q = a, mean = ex, sd = sdx)) - prob
@@ -73,7 +74,7 @@ arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = 
     stop("Missing custom prior.")
 
   n <- length(x)
-  fit <- do.call(arima, c(list(x, order, xreg = xreg[1:n, ]), arima_args))
+  fit <- arima(x = x, order = order, xreg = xreg[1:n,, drop = FALSE], ...)
   if (fit$code != 0 || sum(diag(fit$var.coef) < 1e-7) != 0)
   {
     stop("arima function returned non-convergence or coefficient variances smaller than 1e-7.")

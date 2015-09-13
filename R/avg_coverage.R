@@ -15,22 +15,17 @@
 #' @param nsim2 number of simulations used in computing the expected coverage
 #' @param level desired coverage probability of the prediction intervals
 #' @param prior prior to be used in importance sampling. Multiple choices are allowed.
-#' @param custom_prior function for computing custom prior. First argument must be a vector containing the AR and MA parameters (in that order).
-#' @param custom_prior_args list containing additional arguments to \code{custom_prior}.
 #' @param return_all_coverages return raw results i.e. coverages for each simulations. When \code{FALSE} (default), summary statistics are returned.
-#' @param ... Optional arguments to \code{\link{arima_pi}}.
+#' @param ... additional arguments to \code{\link{arima_pi}}.
 #' @return a list containing the coverage probabilities
 avg_coverage_arima <- function(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
-  nsim2, nsim = 100, level = 0.95, prior = "uniform", custom_prior,
-  custom_prior_args, return_all_coverages = FALSE, ...){
+  nsim2, nsim = 100, level = 0.95, prior = "uniform", return_all_coverages = FALSE, ...){
 
   p <- length(phi)
   q <- length(theta)
   prior <- match.arg(prior,
     c("uniform", "approx_joint_jeffreys", "approx_marginal_jeffreys",
       "exact_joint_jeffreys", "exact_marginal_jeffreys", "custom"))
-  if (prior == "custom" && missing(custom_prior))
-    stop("Missing custom prior.")
 
   covprobs<-array(0, c(n_ahead, nsim2, 2))
 

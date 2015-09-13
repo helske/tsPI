@@ -11,7 +11,7 @@ static R_FortranMethodDef FortEntries[] = {
 		{NULL, NULL, 0}
 };
 
-void R_init_arimaPI(DllInfo *dll)
+void R_init_tsPI(DllInfo *dll)
 {
 	R_registerRoutines(dll, NULL, NULL, FortEntries, NULL);
 	R_useDynamicSymbols(dll, FALSE);

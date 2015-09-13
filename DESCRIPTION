@@ -1,7 +1,7 @@
 Package: tsPI
 Title: Bayesian Prediction Intervals for ARIMA Processes and Structural Time Series
 Version: 1.0.0
-Date: 2015-09-11
+Date: 2015-09-13
 Author: Jouni Helske
 Maintainer: Jouni Helske <jouni.helske@jyu.fi>
 Imports: KFAS

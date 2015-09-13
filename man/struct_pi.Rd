@@ -7,7 +7,7 @@
 struct_pi(x, type = c("level", "trend", "BSM"), xreg = NULL, n_ahead = 1,
   level = 0.95, median = TRUE, se_limits = TRUE, prior = "uniform",
   custom_prior, custom_prior_args, nsim = 1000, inits = NULL,
-  last_only = FALSE, return_weights = FALSE, ...)
+  last_only = FALSE, return_weights = FALSE)
 }
 \arguments{
 \item{x}{vector containing the time series}
@@ -42,8 +42,6 @@ First argument must be a vector containing the log-variance parameters.}
 \item{last_only}{compute the prediction intervals only for the last prediction step.}
 
 \item{return_weights}{Return (scaled) weights used in importance sampling.}
-
-\item{...}{Additional arguments for \code{arima}.}
 }
 \value{
 a list containing the prediction intervals.
@@ -69,7 +67,7 @@ ts.plot(ts.union(Nile,pred_StructTS, pred[,1:3]), col = c(1,2,2,2,3,3,3),
 intervals for autoregressive models by simulation.
 In Siem Jan Koopman and Neil Shephard, editors,
 Unobserved Components and Time Series Econometrics. Oxford University Press. In press.}
- \item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis.}
+ \item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis. In press.}
 }
 }
 

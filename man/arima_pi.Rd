@@ -7,7 +7,7 @@
 arima_pi(x, order, xreg = NULL, n_ahead = 1, level = 0.95,
   median = TRUE, se_limits = TRUE, prior = "uniform", custom_prior,
   custom_prior_args = NULL, nsim = 1000, last_only = FALSE,
-  return_weights = FALSE, arima_args = NULL)
+  return_weights = FALSE, ...)
 }
 \arguments{
 \item{x}{vector containing the time series}
@@ -42,7 +42,7 @@ First argument must be a vector containing the AR and MA parameters (in that ord
 
 \item{return_weights}{Return (scaled) weights used in importance sampling.}
 
-\item{...}{Additional arguments for \code{arima}.}
+\item{...}{additional arguments for \code{\link{arima}}.}
 }
 \value{
 a list containing the prediction intervals.
@@ -77,7 +77,7 @@ Unobserved Components and Time Series Econometrics. Oxford University Press. In 
  ARMA models by simulation.
  In Johan Knif and Bernd Pape, editors,
 Contributions to Mathematics, Statistics, Econometrics, and Finance:
-essays in honour of professor Seppo Pynnonen,
+essays in honour of professor Seppo Pynnönen,
 number 296 in Acta Wasaensia, pages 71–86. University of Vaasa.}
 }
 }
