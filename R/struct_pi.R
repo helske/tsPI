@@ -53,12 +53,14 @@
 #'
 struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
   n_ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
-  prior = "uniform", custom_prior, custom_prior_args, nsim = 1000, inits = NULL,
+  prior = "uniform", custom_prior, custom_prior_args = NULL, nsim = 1000, inits = NULL,
   last_only = FALSE, return_weights = FALSE){
 
   distfkt <- function(a, prob, ex, sdx, w){
     sum(w * pnorm(q = a, mean = ex, sd = sdx)) - prob
   }
+  if(level >= 1 | level < 0)
+    stop("Invalid value of argument 'level'.")
 
   type <- match.arg(type)
   prior <- match.arg(prior, c("uniform", "custom"))

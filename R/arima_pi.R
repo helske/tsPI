@@ -66,6 +66,8 @@ arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = 
     sum(w * pnorm(q = a, mean = ex, sd = sdx)) - prob
   }
 
+  if (level >= 1 | level < 0)
+    stop("Invalid value of argument 'level'.")
   prior <- match.arg(prior,
     c("uniform", "approx_joint_jeffreys", "approx_marginal_jeffreys",
       "exact_joint_jeffreys", "exact_marginal_jeffreys", "custom"))
