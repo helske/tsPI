@@ -40,7 +40,7 @@
 #'  ARMA models by simulation.
 #'  In Johan Knif and Bernd Pape, editors,
 #' Contributions to Mathematics, Statistics, Econometrics, and Finance:
-#' essays in honour of professor Seppo Pynnonen,
+#' essays in honour of professor Seppo Pynnönen,
 #' number 296 in Acta Wasaensia, pages 71–86. University of Vaasa.}
 #' }
 #' @examples

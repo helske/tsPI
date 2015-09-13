@@ -1,11 +1,11 @@
-Package: arimaPI
-Title: Bayesian Prediction Intervals for ARIMA Processes
+Package: tsPI
+Title: Bayesian Prediction Intervals for ARIMA Processes and Structural Time Series
 Version: 1.0.0
 Date: 2015-09-11
 Author: Jouni Helske
 Maintainer: Jouni Helske <jouni.helske@jyu.fi>
 Imports: KFAS
-Description: Bayesian prediction intervals for ARIMA processes with exogenous variables which take account the parameter uncertainty, leading to more accurate coverage probabilities in frequentist sense. Method uses importance sampling and root solving based on the predicted values and prediction errors.
+Description: Bayesian prediction intervals for ARIMA processes and structural time series with exogenous variables which take account the parameter uncertainty, leading to more accurate coverage probabilities in frequentist sense. Package uses computationally efficient importance sampling and root solving based on the predicted values and prediction errors, allowing computation of standard errors for prediction limits.
 License: GPL-3
 NeedsCompilation: yes
 Encoding: UTF-8

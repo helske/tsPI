@@ -6,8 +6,8 @@
 \usage{
 struct_pi(x, type = c("level", "trend", "BSM"), xreg = NULL, n_ahead = 1,
   level = 0.95, median = TRUE, se_limits = TRUE, prior = "uniform",
-  custom_prior, custom_prior_args, nsim = 1000, inits, last_only = FALSE,
-  return_weights = FALSE, ...)
+  custom_prior, custom_prior_args, nsim = 1000, inits = NULL,
+  last_only = FALSE, return_weights = FALSE, ...)
 }
 \arguments{
 \item{x}{vector containing the time series}
@@ -27,7 +27,7 @@ corresponding to local level, local linear trend, and local linear trend model w
 \item{se_limits}{compute the standard errors of the prediction interval limits.}
 
 \item{prior}{prior to be used in importance sampling for log-sd parameters.
-Defaults to uniform prior on logarithm of standard deviations.
+Defaults to uniform prior on logarithm of standard deviations (with constraints that all variances are smaller than 1e7).
 If "custom", a user-defined custom prior is used (see next arguments).}
 
 \item{custom_prior}{function for computing custom prior.
@@ -69,12 +69,7 @@ ts.plot(ts.union(Nile,pred_StructTS, pred[,1:3]), col = c(1,2,2,2,3,3,3),
 intervals for autoregressive models by simulation.
 In Siem Jan Koopman and Neil Shephard, editors,
 Unobserved Components and Time Series Econometrics. Oxford University Press. In press.}
- \item{Helske, J. and Nyblom, J. (2014). Improved frequentist prediction intervals for
- ARMA models by simulation.
- In Johan Knif and Bernd Pape, editors,
-Contributions to Mathematics, Statistics, Econometrics, and Finance:
-essays in honour of professor Seppo Pynnonen,
-number 296 in Acta Wasaensia, pages 71–86. University of Vaasa.}
+ \item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis.}
 }
 }
 

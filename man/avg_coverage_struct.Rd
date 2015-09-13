@@ -5,9 +5,9 @@
 \title{Compute the average coverage of the prediction intervals computed by
 naive plug-in method and \code{\link{struct_pi}}}
 \usage{
-avg_coverage_struct(type, sds, n, n_ahead = 1, nsim2, nsim = 100,
-  level = 0.95, prior = "uniform", custom_prior, custom_prior_args,
-  return_all_coverages = FALSE, ...)
+avg_coverage_struct(type = c("level", "trend", "BSM"), sds, n, n_ahead = 1,
+  nsim2, nsim = 100, level = 0.95, prior = "uniform", custom_prior,
+  custom_prior_args, return_all_coverages = FALSE, ...)
 }
 \arguments{
 \item{type}{Type of model. See \code{\link{struct_pi}}.}

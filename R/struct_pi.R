@@ -3,6 +3,7 @@
 #' Function \code{struct_pi} computes prediction intervals for structural time series
 #' with exogenous variables using importance sampling.
 #'
+#'
 #' @export
 #' @import KFAS
 #' @name struct_pi
@@ -34,12 +35,7 @@
 #' intervals for autoregressive models by simulation.
 #' In Siem Jan Koopman and Neil Shephard, editors,
 #' Unobserved Components and Time Series Econometrics. Oxford University Press. In press.}
-#'  \item{Helske, J. and Nyblom, J. (2014). Improved frequentist prediction intervals for
-#'  ARMA models by simulation.
-#'  In Johan Knif and Bernd Pape, editors,
-#' Contributions to Mathematics, Statistics, Econometrics, and Finance:
-#' essays in honour of professor Seppo Pynnonen,
-#' number 296 in Acta Wasaensia, pages 71–86. University of Vaasa.}
+#'  \item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis. In press.}
 #' }
 #' @examples
 #'
@@ -58,7 +54,7 @@
 #'
 struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
   n_ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
-  prior = "uniform", custom_prior, custom_prior_args, nsim = 1000, inits,
+  prior = "uniform", custom_prior, custom_prior_args, nsim = 1000, inits = NULL,
   last_only = FALSE, return_weights = FALSE, ...){
 
   distfkt <- function(a, prob, ex, sdx, w){
@@ -97,12 +93,12 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
     model$H[1] <- exp(2 * pars[1])
     - logLik(model)
   }
-  fit <- optim(fn = likfn, par = if (missing(inits)) log(rep(sd(x, na.rm = TRUE), npar)) else inits,
+  fit <- optim(fn = likfn, par = if (is.null(inits)) log(rep(sd(x, na.rm = TRUE), npar)) else inits,
     method = "BFGS", hessian = TRUE, model = model)
 
-  if (any(exp(2*fit$par) < 1e-7))
-    warning("Some of the variance parameters were estimated as smaller than 1e-7.
-      Boundaries of parameter space can cause problems in importance sampling. Consider fixing variances to zero.")
+#   if (any(exp(2*fit$par) < 1e-7))
+#     warning("Some of the variance parameters were estimated as smaller than 1e-7.
+#       Boundaries of parameter space can cause problems in importance sampling. Consider fixing variances to zero.")
 
   psihat <- as.numeric(fit$par)
   psivarchol <- try(t(chol(solve(fit$hessian))), TRUE)
