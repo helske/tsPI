@@ -16,7 +16,7 @@
 #'\item{McLeod, A. I. and Zhang, Y., (2007). Faster ARMA maximum likelihood estimation Computational Statistics & Data
 #' Analysis 52(4) URL http://dx.doi.org/10.1016/j.csda.2007.07.020}
 #' }
-information_arma <- function(phi, theta){
+information_arma <- function(phi = NULL, theta = NULL){
   imat <- .Fortran(fapproxinfmat, length(phi),
     length(theta), as.double(c(phi, theta)), imat = diag(length(phi) + length(theta)))$imat
   imat[lower.tri(imat)] <- imat[upper.tri(imat)]
