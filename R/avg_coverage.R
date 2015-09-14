@@ -1,7 +1,9 @@
 #' Compute the average coverage of the prediction intervals computed by
 #' naive plug-in method and \code{\link{arima_pi}}
 #'
-#' Computes expected coverage probabilities of the prediction intervals of ARMA process.
+#' Computes expected coverage probabilities of the prediction intervals of
+#' ARMA process by simulating time series from the known model.
+#'
 #'
 #' @export
 #' @seealso \code{\link{arima_pi}}.
@@ -18,6 +20,16 @@
 #' @param return_all_coverages return raw results i.e. coverages for each simulations. When \code{FALSE} (default), summary statistics are returned.
 #' @param ... additional arguments to \code{\link{arima_pi}}.
 #' @return a list containing the coverage probabilities
+#' @examples
+#'
+#'
+#' \dontrun{
+#' set.seed(123)
+#' # takes a while, notice se, increase nsim2 to get more accurate results
+#' avg_coverage_arima(phi = 0.9, n = 50, n_ahead = 10, nsim2 = 100)
+#'
+#' avg_coverage_arima(phi = 0.9, theta = -0.6, n = 50, n_ahead = 10, nsim2 = 100)
+#' }
 avg_coverage_arima <- function(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
   nsim2, nsim = 100, level = 0.95, prior = "uniform", return_all_coverages = FALSE, ...){
 
@@ -30,24 +42,24 @@ avg_coverage_arima <- function(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
   covprobs<-array(0, c(n_ahead, nsim2, 2))
 
   dimnames(covprobs)[[3]] <- c("plug-in", prior)
+  count <- count2 <- 0
   for (i in 1:nsim2) {
     fit <- NULL
     fit$code <- 1
-    while(fit$code != 0){ #simulate series until estimating is successful
-      x <- arima.sim(n = n - d, list(ar = phi, ma = theta, order = c(p, d, q)))
+    x <- arima.sim(n = n - d, list(ar = phi, ma = theta, order = c(p, d, q)))
 
-
-      fit <- try(arima(x, order = c(p,d,q),method="CSS-ML",optim.control=list(maxit=1000)),TRUE)
-      if(inherits(fit, "try-error") || fit$code!=0 || sum(diag(fit$var.coef)<1e-7)!=0 ||
-          ifelse(p>0,!all(Mod(polyroot(c(1, -fit$coef[1:p]))) > 1), FALSE))
-      {
-        fit<-try(arima(x,order=c(p,d,q), method = "ML",optim.control=list(maxit=1000)),TRUE)
-        if(inherits(fit, "try-error") || fit$code!=0 || sum(diag(fit$var.coef)<1e-7)!=0 ||
-            ifelse(p>0,!all(Mod(polyroot(c(1, -fit$coef[1:p]))) > 1),FALSE))
-          fit<-NULL
-        fit$code<-1
+    fit <- try(suppressWarnings(arima(x, order = c(p,d,q),method="CSS-ML",optim.control=list(maxit=1000))),TRUE)
+    # try again
+    if (inherits(fit, "try-error") || fit$code!=0 || sum(diag(fit$var.coef)<1e-7)!=0 || ifelse(p>0,!all(Mod(polyroot(c(1, -fit$coef[1:p]))) > 1), FALSE)) {
+      fit <- try(suppressWarnings(arima(x,order=c(p,d,q), method = "ML",optim.control=list(maxit=1000))), TRUE)
+      if(inherits(fit, "try-error") || fit$code!=0 || sum(diag(fit$var.coef)<1e-7)!=0 || ifelse(p>0,!all(Mod(polyroot(c(1, -fit$coef[1:p]))) > 1),FALSE)){
+        #still fails, give up
+        count <- count + 1
+        covprobs[, i, 2] <- covprobs[, i, 1] <- NA
+        next
       }
     }
+
     model <- SSModel(x ~ SSMarima(ar = if (p > 0) fit$coef[1:p] else NULL,
       ma = if(q > 0) fit$coef[(p + 1):(p + q)] else NULL, d = d, Q = fit$sigma), H = 0)
     newdata <- SSModel(rep(NA, n_ahead) ~ SSMarima(ar = if(p > 0) fit$coef[1:p] else NULL,
@@ -74,23 +86,29 @@ avg_coverage_arima <- function(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
     ipi <- try(arima_pi(x,order=c(p,d,q),nsim = nsim,level = level, n_ahead = n_ahead,
       prior = prior, median = FALSE, se_limits = FALSE, ...),TRUE)
     if(!inherits(ipi, "try-error")){
-
       covprobs[, i,2] <- pnorm(q=ipi[,"upr"],mean=true_pred[,"fit"], sd=true_pred[,"se.fit"]) -
         pnorm(q=ipi[,"lwr"],mean=true_pred[,"fit"], sd=true_pred[,"se.fit"])
+    } else {
+      count2 <- count2 + 1
     }
     covprobs[, i,1] <- pnorm(q=pred[,3],mean=true_pred[,"fit"], sd=true_pred[,"se.fit"]) - pnorm(q=pred[,2],mean=true_pred[,"fit"], sd=true_pred[,"se.fit"])
 
   }
+  if(count > 0)
+    warning(paste0("There were",count, "cases where the arima.sim generated a series which caused the estimation of the model to fail. These cases were set as NA when computing coverage probabilities. " ))
+  if(count2 > 0)
+      warning(paste0("There were ",count2, " cases where the the importance sampling method generated error. The coverage probability for these cases were set to zero when computing coverage probabilities. " ))
+
   if(!return_all_coverages){
     out <- vector("list", 2)
     names(out) <- c("plugin", prior)
     for(i in 1:2){
-      out[[i]] <- matrix(0, n_ahead, 7)
-      colnames(out[[i]]) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.","se")
+      out[[i]] <- matrix(0, n_ahead, 8)
+      colnames(out[[i]]) <- c("Min.", "1st Qu.", "Median", "Mean", "3rd Qu.", "Max.","Standard error", "Failures")
       rownames(out[[i]]) <- paste("n_ahead =", 1:n_ahead)
       for(j in 1:n_ahead)
-        out[[i]][j,] <- c(summary(covprobs[j,,i]), sd(covprobs[j,,i])/sqrt(nsim2))
+        out[[i]][j,] <- c(summary(na.exclude(covprobs[j,,i])), sd(covprobs[j,,i], na.rm = TRUE)/sqrt(nsim2-count), sum(is.na(covprobs[j,,i]))+(i==2)*count2)
     }
-  return(out)
+    return(out)
   } else return(covprobs)
 }

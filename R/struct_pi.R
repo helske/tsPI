@@ -21,7 +21,7 @@
 #' Defaults to uniform prior on logarithm of standard deviations (with constraints that all variances are smaller than 1e7).
 #' If "custom", a user-defined custom prior is used (see next arguments).
 #' @param custom_prior function for computing custom prior.
-#' First argument must be a vector containing the log-variance parameters.
+#' First argument must be a vector containing the log-variance parameters (observation error, level, slope, and seasonal).
 #' @param custom_prior_args list containing additional arguments to \code{custom_prior}.
 #' @param inits initial values for log-sds
 #' @param last_only compute the prediction intervals only for the last prediction step.
@@ -94,8 +94,8 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
     model$H[1] <- exp(2 * pars[1])
     - logLik(model)
   }
-  fit <- optim(fn = likfn, par = if (is.null(inits)) log(rep(sd(x, na.rm = TRUE), npar)) else inits,
-    method = "BFGS", hessian = TRUE, model = model)
+  fit <- optim(fn = likfn, par = if (is.null(inits)) log(rep(sd(x, na.rm = TRUE), npar)/100) else inits,
+    method = "BFGS", hessian = TRUE, model = model, control = list(reltol= 1e-10))
 
 #   if (any(exp(2*fit$par) < 1e-7))
 #     warning("Some of the variance parameters were estimated as smaller than 1e-7.
