@@ -31,7 +31,8 @@
 #' set.seed(123)
 #' # takes a while, notice se, increase nsim2 to get more accurate results
 #' avg_coverage_struct(type = "level", sds = c(1, 0.1), n = 50, n_ahead = 10, nsim2 = 100)
-#' avg_coverage_struct(type = "BSM", sds = c(1, 1, 0.1, 10), frequency = 4, n = 50, n_ahead = 10, nsim2 = 100)
+#' avg_coverage_struct(type = "BSM", sds = c(1, 1, 0.1, 10),
+#'  frequency = 4, n = 50, n_ahead = 10, nsim2 = 100)
 #' }
 avg_coverage_struct <- function(type = c("level", "trend", "BSM"), sds, frequency = 1, n, n_ahead = 1,
   nsim2, nsim = 100, level = 0.95, prior = "uniform", return_all_coverages = FALSE, ...){

@@ -1,9 +1,9 @@
 subroutine arcov(ar, ma, p, q, b)
     ! Cross-covariances of auxiliary AR process of ARMA(p, q) model
     ! Based on
-    !  McLeod, A.I. (1975), 
-    !  Derivation of the theoretical autocorrelation function of 
-    !  autoregressive moving-average time series, 
+    !  McLeod, A.I. (1975),
+    !  Derivation of the theoretical autocorrelation function of
+    !  autoregressive moving-average time series,
     !  Applied Statistics 24, 255-256.
     !  and tccfAR function in FitARMA R package
     implicit none
