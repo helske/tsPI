@@ -51,7 +51,8 @@ and the effect of uncertainty in MA components is not as significant as the unce
 set.seed(123)
 # takes a while, notice se, increase nsim2 to get more accurate results
 avg_coverage_struct(type = "level", sds = c(1, 0.1), n = 50, n_ahead = 10, nsim2 = 100)
-avg_coverage_struct(type = "BSM", sds = c(1, 1, 0.1, 10), frequency = 4, n = 50, n_ahead = 10, nsim2 = 100)
+avg_coverage_struct(type = "BSM", sds = c(1, 1, 0.1, 10),
+ frequency = 4, n = 50, n_ahead = 10, nsim2 = 100)
 }
 }
 \seealso{
