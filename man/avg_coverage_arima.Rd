@@ -36,7 +36,17 @@ avg_coverage_arima(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
 a list containing the coverage probabilities
 }
 \description{
-Computes expected coverage probabilities of the prediction intervals of ARMA process.
+Computes expected coverage probabilities of the prediction intervals of
+ARMA process by simulating time series from the known model.
+}
+\examples{
+\dontrun{
+set.seed(123)
+# takes a while, notice se, increase nsim2 to get more accurate results
+avg_coverage_arima(phi = 0.9, n = 50, n_ahead = 10, nsim2 = 100)
+
+avg_coverage_arima(phi = 0.9, theta = -0.6, n = 50, n_ahead = 10, nsim2 = 100)
+}
 }
 \seealso{
 \code{\link{arima_pi}}.

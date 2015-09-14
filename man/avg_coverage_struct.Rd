@@ -2,17 +2,19 @@
 % Please edit documentation in R/avg_coverage_struct.R
 \name{avg_coverage_struct}
 \alias{avg_coverage_struct}
-\title{Compute the average coverage of the prediction intervals computed by
-naive plug-in method and \code{\link{struct_pi}}}
+\title{Compute the average coverage of the prediction intervals computed by \code{\link{struct_pi}}
+and plug-in method}
 \usage{
-avg_coverage_struct(type = c("level", "trend", "BSM"), sds, n, n_ahead = 1,
-  nsim2, nsim = 100, level = 0.95, prior = "uniform",
+avg_coverage_struct(type = c("level", "trend", "BSM"), sds, frequency = 1,
+  n, n_ahead = 1, nsim2, nsim = 100, level = 0.95, prior = "uniform",
   return_all_coverages = FALSE, ...)
 }
 \arguments{
 \item{type}{Type of model. See \code{\link{struct_pi}}.}
 
-\item{sds}{vector containing the standard deviations of the model.}
+\item{sds}{vector containing the standard deviations of the model (observation error, level, slope, and seasonal).}
+
+\item{frequency}{frequency of the series, needed for seasonal component.}
 
 \item{n}{length of the time series}
 
@@ -35,6 +37,22 @@ a list containing the coverage probabilities
 }
 \description{
 Computes expected coverage probabilities of the prediction intervals of structural time series model.
+Note that for the plug-in method only standard deviations are assumed to be identical to their estimates,
+but the initial values for the states are still treated as diffuse. Because of this,
+plug-in method often performs relatively well in case of structural time series models
+compared to similar type of ARIMA models
+(local level and local linear trend models are closely related to ARIMA(0,1,1) and ARIMA(0,2,2) models),
+and in some cases even outperforms the importance sampling approach with uniform prior (see examples).
+This is not suprising, as local level and local linear trend models are closely related to ARIMA(0,1,1) and ARIMA(0,2,2) models,
+and the effect of uncertainty in MA components is not as significant as the uncertainty of AR components
+}
+\examples{
+\dontrun{
+set.seed(123)
+# takes a while, notice se, increase nsim2 to get more accurate results
+avg_coverage_struct(type = "level", sds = c(1, 0.1), n = 50, n_ahead = 10, nsim2 = 100)
+avg_coverage_struct(type = "BSM", sds = c(1, 1, 0.1, 10), frequency = 4, n = 50, n_ahead = 10, nsim2 = 100)
+}
 }
 \seealso{
 \code{\link{struct_pi}}.

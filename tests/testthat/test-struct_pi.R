@@ -1,7 +1,8 @@
 context("Testing struct_pi")
 
+set.seed(123)
+x <- rnorm(10)
 test_that("bogus arguments throw error",{
-  x <- rnorm(10)
   expect_error(struct_pi(x, type = "arima"))
   expect_error(struct_pi(x, xreg = 1))
   expect_error(struct_pi(x, n_ahead = -1))
@@ -13,16 +14,15 @@ test_that("bogus arguments throw error",{
 })
 
 test_that("output of struct_pi is of correct size and form",{
-  x <- ts(rnorm(10), start = 2000, frequency = 12)
-  pred <- struct_pi(x, n_ahead = 5, nsim = 50)
+  y <- ts(x, start = 2000, frequency = 12)
+  pred <- struct_pi(y, n_ahead = 5, nsim = 50)
   expect_identical(dim(pred), c(5L, 5L))
   expect_identical(class(pred), c("mts", "ts", "matrix"))
-  expect_identical(frequency(pred), frequency(x))
-  expect_identical(start(pred), end(x)+c(0, 1))
+  expect_identical(frequency(pred), frequency(y))
+  expect_identical(start(pred), end(y)+c(0, 1))
 })
 
 test_that("same seeds give same results",{
-    x <- rnorm(10)
     set.seed(1)
     pred1 <- struct_pi(x, nsim = 50)
     set.seed(1)
@@ -31,7 +31,6 @@ test_that("same seeds give same results",{
 })
 
 test_that("larger nsim gives smaller se",{
-  x <- rnorm(10)
   set.seed(1)
   pred1 <- struct_pi(x, nsim = 50)
   set.seed(1)

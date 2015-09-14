@@ -1,8 +1,9 @@
 context("Testing arima_pi")
 
+set.seed(123)
+x <- rnorm(10)
 
 test_that("bogus arguments throw error",{
-  x <- rnorm(10)
   expect_error(arima_pi(x, phi = -2))
   expect_error(arima_pi(x, order = "ar"))
   expect_error(arima_pi(x, xreg = 1))
@@ -15,16 +16,15 @@ test_that("bogus arguments throw error",{
 })
 
 test_that("output of arima_pi is of correct size and form",{
-  x <- ts(rnorm(10), start = 2000, frequency = 12)
-  pred <- arima_pi(x, order = c(1, 0, 0), n_ahead = 5, nsim = 50)
+  y <- ts(rnorm(10), start = 2000, frequency = 12)
+  pred <- arima_pi(y, order = c(1, 0, 0), n_ahead = 5, nsim = 50)
   expect_identical(dim(pred), c(5L, 5L))
   expect_identical(class(pred), c("mts", "ts", "matrix"))
-  expect_identical(frequency(pred), frequency(x))
-  expect_identical(start(pred), end(x)+c(0, 1))
+  expect_identical(frequency(pred), frequency(y))
+  expect_identical(start(pred), end(y)+c(0, 1))
 })
 
 test_that("same seeds give same results",{
-    x <- rnorm(10)
     set.seed(1)
     pred1 <- arima_pi(x, c(1, 0, 0), nsim = 50)
     set.seed(1)
@@ -33,7 +33,6 @@ test_that("same seeds give same results",{
 })
 
 test_that("larger nsim gives smaller se",{
-  x <- rnorm(10)
   set.seed(1)
   pred1 <- arima_pi(x, c(1, 0, 0), nsim = 50)
   set.seed(1)

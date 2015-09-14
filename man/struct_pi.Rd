@@ -31,7 +31,7 @@ Defaults to uniform prior on logarithm of standard deviations (with constraints 
 If "custom", a user-defined custom prior is used (see next arguments).}
 
 \item{custom_prior}{function for computing custom prior.
-First argument must be a vector containing the log-variance parameters.}
+First argument must be a vector containing the log-variance parameters (observation error, level, slope, and seasonal).}
 
 \item{custom_prior_args}{list containing additional arguments to \code{custom_prior}.}
 
