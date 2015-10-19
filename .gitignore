@@ -13,5 +13,7 @@ vignettes/*.html
 vignettes/*.pdf
 .Rproj.user
 
+src-i386
+src-x64
 src/*.o
 src/*.dll

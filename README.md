@@ -12,5 +12,5 @@ ARIMA case is based on articles
 - Jouni Helske and Jukka Nyblom. Improved frequentist prediction intervals for arma models by simulation. In Johan Knif and Bernd Pape, editors, Contributions to Mathematics, Statistics, Econometrics, and Finance: essays in honour of professor Seppo Pynnönen, number 296 in Acta Wasaensia, pages 71–86. University of Vaasa, 2014. http://www.uva.fi/materiaali/pdf/isbn_978-952-476-523-7.pdf
 
 Structural time series model case is based on a straightforward generalization presented in 
-- Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis. In press.
+- Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis.
 
