@@ -14,3 +14,30 @@ ARIMA case is based on articles
 Structural time series model case is based on a straightforward generalization presented in 
 - Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis.
 
+### Example: 95 % prediction intervals for AR(1) process ###
+
+```{r, fig.height = 4, fig.width = 8}
+library(tsPI)
+library(KFAS) #for plug-in intervals
+
+set.seed(12345)
+x <- arima.sim(n = 30, model = list(ar = 0.9))
+fit <- arima(x, c(1, 0, 0))
+model <- SSModel(x ~ SSMarima(ar = fit$coef[1], Q = fit$sigma), H = 0)
+model$P1inf[1,1] <- 0
+model$a1[1] <- fit$coef[2]
+pred_plugin <- predict(model, n.ahead = 10, interval = "prediction")
+pred_tspi  <- arima_pi(x, c(1, 0, 0), n_ahead = 10, se_limits = FALSE, nsim = 1000)
+
+ylim <- round(range(c(pred_plugin, pred_tspi, x)) + c(-1, 1))
+
+plot(ts.union(x, pred_plugin, pred_tspi), plot.type = "single",
+  col = c(1, 2, 2, 2, 4, 4, 4), pch = c(19, 15, 15, 15, 15, 15, 15),
+  lty = c(1, 1, 1, 1, 1), type = "b",
+  ylim = ylim, xlab = "time", ylab= "value", axes = FALSE)
+axis(1, at = 1:40, labels = 1:40)
+axis(2, at = ylim[1]:ylim[2])
+legend("topleft", c("observations", "plug-in",  "tsPI"), 
+  lty = 1, pch= c(19, 15, 15), col = c(1, 2, 4))
+```  
+![imfs](https://github.com/helske/tsPI/blob/master/ar1.png)
