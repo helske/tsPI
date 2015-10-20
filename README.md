@@ -41,3 +41,13 @@ legend("topleft", c("observations", "plug-in",  "tsPI"),
   lty = 1, pch= c(19, 15, 15), col = c(1, 2, 4))
 ```  
 ![imfs](https://github.com/helske/tsPI/blob/master/ar1.png)
+
+### Installing tsPI ###
+
+Package will be soon available at CRAN. In the meantime, you can install the latest development version from the github using the `devtools` package:
+
+```R
+install.packages("devtools")
+library(devtools)
+install_github("helske/tsPI")
+```
