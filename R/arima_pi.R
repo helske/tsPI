@@ -25,6 +25,7 @@
 #' @param custom_prior function for computing custom prior.
 #' First argument must be a vector containing the AR and MA parameters (in that order).
 #' @param custom_prior_args list containing additional arguments to \code{custom_prior}.
+#' @param invertibility Logical, should the priors include invertibility constraint? Default is \code{FALSE}.
 #' @param last_only compute the prediction intervals only for the last prediction step.
 #' @param return_weights Return (scaled) weights used in importance sampling.
 #' @param ... additional arguments for \code{\link{arima}}.
@@ -59,7 +60,7 @@
 #'   lty = c(1,1,2,2,1,2,2))
 #'
 arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
-  prior = "uniform", custom_prior, custom_prior_args  = NULL, nsim = 1000, last_only = FALSE,
+  prior = "uniform", custom_prior, custom_prior_args  = NULL, nsim = 1000, invertibility = FALSE, last_only = FALSE,
   return_weights = FALSE, ...){
 
   distfkt <- function(a, prob, ex, sdx, w){
@@ -104,8 +105,8 @@ arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = 
   if (p > 0) {
     w <- apply(matrix(abs(apply(cbind(rep(1, nsim),-psisim[, 1:p]), 1, polyroot)) > 1, p, nsim), 2, sum) == p
   } else w <- rep(1, nsim)
-  #invertibility
-  if (q > 0) {
+  #invertibility?
+  if (q > 0 && invertibility) {
     w <- w * apply(matrix(abs(apply(cbind(rep(1, nsim), psisim[, (p + 1):(p + q)]),1, polyroot)) > 1, q, nsim), 2, sum) == q
   }
 

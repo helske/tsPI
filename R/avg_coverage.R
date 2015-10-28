@@ -39,6 +39,11 @@ avg_coverage_arima <- function(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
     c("uniform", "approx_joint_jeffreys", "approx_marginal_jeffreys",
       "exact_joint_jeffreys", "exact_marginal_jeffreys", "custom"))
 
+  if (p > 0 && !all(Mod(polyroot(c(1, -phi))) > 1))
+    stop("True model is not stationary.")
+ # if (q > 0 && !all(Mod(polyroot(c(1, -theta))) > 1))
+ #   stop("True model is not invertible.")
+
   covprobs<-array(0, c(n_ahead, nsim2, 2))
 
   dimnames(covprobs)[[3]] <- c("plug-in", prior)
@@ -95,7 +100,7 @@ avg_coverage_arima <- function(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
 
   }
   if(count > 0)
-    warning(paste0("There were",count, "cases where the arima.sim generated a series which caused the estimation of the model to fail. These cases were set as NA when computing coverage probabilities. " ))
+    warning(paste0("There were",count, " cases where the arima.sim generated a series which caused the estimation of the model to fail. These cases were set as NA when computing coverage probabilities. " ))
   if(count2 > 0)
       warning(paste0("There were ",count2, " cases where the the importance sampling method generated error. The coverage probability for these cases were set to zero when computing coverage probabilities. " ))
 
