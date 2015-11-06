@@ -6,11 +6,19 @@
 #' @rdname acv_arma
 #' @name acv_arma
 #' @seealso \code{\link{dacv_arma}}.
-#
 #' @param phi vector containing the AR parameters
 #' @param theta vector containing the MA parameters
 #' @param n length of the time series
 #' @return vector of length n containing the autocovariances
+#' @examples
+#'
+#' ## Example from Brockwell & Davis (1991, page 92-94)
+#' ## also in help page of ARMAacf (from stats)
+#' n <- 0:9
+#' answer <- 2^(-n) * (32/3 + 8 * n) /(32/3)
+#' acv <- acv_arma(c(1.0, -0.25), 1.0, 10)
+#' all.equal(acv/acv[1], answer)
+#'
 acv_arma<-  function(phi,theta,n){
   acv <- numeric(n)
   model <- SSMarima(phi,theta,n=1)
@@ -57,6 +65,7 @@ dacv_arma<-function(phi,theta,n){
       for(j in 1:m)
         for(k in 1:m)
           kroneckerTtdTt[(j-1)*m+i,(k-1)*m+1]<-Tt[j,k]
+
       kroneckerTtdTt[((i-1)*m+1):(i*m),1:m] <- kroneckerTtdTt[((i-1)*m+1):(i*m),1:m] + Tt
 
       prodTtP1<-model$P1

@@ -6,8 +6,8 @@
 \usage{
 arima_pi(x, order, xreg = NULL, n_ahead = 1, level = 0.95,
   median = TRUE, se_limits = TRUE, prior = "uniform", custom_prior,
-  custom_prior_args = NULL, nsim = 1000, last_only = FALSE,
-  return_weights = FALSE, ...)
+  custom_prior_args = NULL, nsim = 1000, invertibility = FALSE,
+  last_only = FALSE, return_weights = FALSE, ...)
 }
 \arguments{
 \item{x}{vector containing the time series}
@@ -37,6 +37,8 @@ First argument must be a vector containing the AR and MA parameters (in that ord
 \item{custom_prior_args}{list containing additional arguments to \code{custom_prior}.}
 
 \item{nsim}{number of simulations used in importance sampling. Default is 1000.}
+
+\item{invertibility}{Logical, should the priors include invertibility constraint? Default is \code{FALSE}.}
 
 \item{last_only}{compute the prediction intervals only for the last prediction step.}
 
