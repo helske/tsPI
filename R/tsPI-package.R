@@ -15,7 +15,7 @@
 #' @aliases tsPI
 #' @useDynLib tsPI
 #' @importFrom KFAS SSModel SSMtrend SSMarima SSMseasonal KFS simulateSSM
-#' @importFrom stats arima arima.sim dnorm end frequency logLik optim pnorm predict rchisq rnorm sd toeplitz ts uniroot window
+#' @importFrom stats na.exclude arima arima.sim dnorm end frequency logLik optim pnorm predict rchisq rnorm sd toeplitz ts uniroot window
 #' @references
 #' \enumerate{
 #' \item{Helske, J. and Nyblom, J. (2013). Improved frequentist prediction
