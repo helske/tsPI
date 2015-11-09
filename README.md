@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/helske/tsPI.png?branch=master)](https://travis-ci.org/helske/tsPI)
 [![codecov.io](http://codecov.io/github/helske/tsPI/coverage.svg?branch=master)](http://codecov.io/github/helske/tsPI?branch=master)
+[![downloads](http://cranlogs.r-pkg.org/badges/tsPI)](http://cranlogs.r-pkg.org/badges/tsPI)
 [![cran version](http://www.r-pkg.org/badges/version/tsPI)](http://cran.r-project.org/package=tsPI)
 
 # tsPI: R package for improved prediction intervals for ARIMA and structural time series models with exogenous variables
