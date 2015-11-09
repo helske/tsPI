@@ -28,7 +28,7 @@ Unobserved Components and Time Series Econometrics. Oxford University Press. In 
 Contributions to Mathematics, Statistics, Econometrics, and Finance:
 essays in honour of professor Seppo Pynnönen,
 number 296 in Acta Wasaensia, pages 71–86. University of Vaasa.}
-\item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis. In press.}
+\item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis, Report 152. }
 }
 }
 

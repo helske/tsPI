@@ -11,3 +11,4 @@ Description: Prediction intervals for ARIMA and structural time series models us
 License: GPL-3
 NeedsCompilation: yes
 Encoding: UTF-8
+BugReports: https://github.com/helske/tsPI/issues
