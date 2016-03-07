@@ -152,7 +152,7 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
           sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[j, 1], nz_ex, nz_sdx)))^2) / (nsim - 1)) /
           (sum(nz_w * dnorm(x = out[j, 1], nz_ex, nz_sdx)/sqrt(nsim)))
         out[j, "se_upr"] <-
-          sqrt(sum((nz_w * ((1 - level) / 2 - pnorm(q = out[j, 2], nz_ex, nz_sdx)))^2) / (nsim - 1)) /
+          sqrt(sum((nz_w * (1 - (1 - level) / 2 - pnorm(q = out[j, 2], nz_ex, nz_sdx)))^2) / (nsim - 1)) /
           (sum(nz_w * dnorm(x = out[j, 2], nz_ex, nz_sdx)/sqrt(nsim)))
       }
     }
