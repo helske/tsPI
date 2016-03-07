@@ -1,7 +1,7 @@
 Package: tsPI
 Title: Improved Prediction Intervals for ARIMA Processes and Structural Time Series
 Version: 1.0.0
-Date: 2015-09-13
+Date: 2015-11-09
 Author: Jouni Helske
 Maintainer: Jouni Helske <jouni.helske@jyu.fi>
 Imports: KFAS
@@ -11,3 +11,4 @@ Description: Prediction intervals for ARIMA and structural time series models us
 License: GPL-3
 NeedsCompilation: yes
 Encoding: UTF-8
+BugReports: https://github.com/helske/tsPI/issues

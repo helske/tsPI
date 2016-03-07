@@ -34,7 +34,7 @@
 #' intervals for autoregressive models by simulation.
 #' In Siem Jan Koopman and Neil Shephard, editors,
 #' Unobserved Components and Time Series Econometrics. Oxford University Press. In press.}
-#'  \item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis. In press.}
+#'  \item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis, Report 152. }
 #' }
 #' @examples
 #'
