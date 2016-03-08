@@ -35,7 +35,7 @@ test_that("larger nsim gives smaller se",{
   pred1 <- struct_pi(x, nsim = 50)
   set.seed(1)
   pred2 <- struct_pi(x, nsim = 100)
-  expect_gt(pred1[, "se_upr"], pred2[, "se_upr"])
+  expect_gt(as.numeric(pred1[, "se_upr"]), as.numeric(pred2[, "se_upr"]))
 })
 
 test_that("struct_pi gives same results each time",{

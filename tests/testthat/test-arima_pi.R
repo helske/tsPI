@@ -37,7 +37,7 @@ test_that("larger nsim gives smaller se",{
   pred1 <- arima_pi(x, c(1, 0, 0), nsim = 50)
   set.seed(1)
   pred2 <- arima_pi(x, c(1, 0, 0), nsim = 100)
-  expect_gt(pred1[, "se_upr"], pred2[, "se_upr"])
+  expect_gt(as.numeric(pred1[, "se_upr"]), as.numeric(pred2[, "se_upr"]))
 })
 
 test_that("arima_pi with uniform prior gives same results each time",{
