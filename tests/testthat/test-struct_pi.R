@@ -35,7 +35,7 @@ test_that("larger nsim gives smaller se",{
   pred1 <- struct_pi(x, nsim = 50)
   set.seed(1)
   pred2 <- struct_pi(x, nsim = 100)
-  expect_more_than(pred1[, "se_upr"], pred2[, "se_upr"])
+  expect_gt(pred1[, "se_upr"], pred2[, "se_upr"])
 })
 
 test_that("struct_pi gives same results each time",{
@@ -44,7 +44,7 @@ test_that("struct_pi gives same results each time",{
   expect_equal(pred[1,"median"], 800.20719, tol = 1e-4, check.attributes = FALSE)
   expect_equal(pred[1,"lwr"], 505.08147, tol = 1e-4, check.attributes = FALSE)
   expect_equal(pred[1,"upr"], 1092.89858, tol = 1e-4, check.attributes = FALSE)
-  expect_equal(pred[1,"se_lwr"], 26.176364, tol = 1e-4, check.attributes = FALSE)
-  expect_equal(pred[1,"se_upr"], 5.3530965, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"se_lwr"], 5.35309, tol = 1e-4, check.attributes = FALSE)
+  expect_equal(pred[1,"se_upr"], 4.167766, tol = 1e-4, check.attributes = FALSE)
 
 })

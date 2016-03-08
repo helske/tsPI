@@ -37,7 +37,7 @@ test_that("larger nsim gives smaller se",{
   pred1 <- arima_pi(x, c(1, 0, 0), nsim = 50)
   set.seed(1)
   pred2 <- arima_pi(x, c(1, 0, 0), nsim = 100)
-  expect_more_than(pred1[, "se_upr"], pred2[, "se_upr"])
+  expect_gt(pred1[, "se_upr"], pred2[, "se_upr"])
 })
 
 test_that("arima_pi with uniform prior gives same results each time",{
@@ -46,8 +46,8 @@ test_that("arima_pi with uniform prior gives same results each time",{
   expect_equal(pred[1,"median"], 2.707872101, tol = 1e-5, check.attributes = FALSE)
   expect_equal(pred[1,"lwr"], 1.809644512, tol = 1e-5, check.attributes = FALSE)
   expect_equal(pred[1,"upr"], 3.606841626, tol = 1e-5, check.attributes = FALSE)
-  expect_equal(pred[1,"se_lwr"], 0.07736541451, tol = 1e-5, check.attributes = FALSE)
-  expect_equal(pred[1,"se_upr"], 0.01355272753, tol = 1e-5, check.attributes = FALSE)
+  expect_equal(pred[1,"se_lwr"], 0.01355273, tol = 1e-5, check.attributes = FALSE)
+  expect_equal(pred[1,"se_upr"], 0.0157178, tol = 1e-5, check.attributes = FALSE)
 })
 test_that("arima_pi with jeffreys gives same results each time",{
   set.seed(1)
