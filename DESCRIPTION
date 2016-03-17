@@ -1,14 +1,25 @@
 Package: tsPI
-Title: Improved Prediction Intervals for ARIMA Processes and Structural Time Series
+Title: Improved Prediction Intervals for ARIMA Processes and Structural Time
+    Series
 Version: 1.0.1
 Date: 2016-03-17
 Author: Jouni Helske
 Maintainer: Jouni Helske <jouni.helske@jyu.fi>
-Imports: KFAS
+Imports:
+    KFAS
 Suggests:
     testthat
-Description: Prediction intervals for ARIMA and structural time series models using importance sampling approach with uninformative priors for model parameters, leading to more accurate coverage probabilities in frequentist sense. Instead of sampling the future observations and hidden states of the state space representation of the model, only model parameters are sampled, and the method is based solving the equations corresponding to the conditional coverage probability of the prediction intervals. This makes method relatively fast compared to for example MCMC methods, and standard errors of prediction limits can also be computed straightforwardly.
+Description: Prediction intervals for ARIMA and structural time series
+    models using importance sampling approach with uninformative priors for model
+    parameters, leading to more accurate coverage probabilities in frequentist
+    sense. Instead of sampling the future observations and hidden states of the
+    state space representation of the model, only model parameters are sampled,
+    and the method is based solving the equations corresponding to the conditional
+    coverage probability of the prediction intervals. This makes method relatively
+    fast compared to for example MCMC methods, and standard errors of prediction
+    limits can also be computed straightforwardly.
 License: GPL-3
 NeedsCompilation: yes
 Encoding: UTF-8
 BugReports: https://github.com/helske/tsPI/issues
+RoxygenNote: 5.0.1

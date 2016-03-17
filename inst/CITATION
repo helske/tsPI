@@ -22,7 +22,7 @@ bibtype = "Incollection",
 	pages	= "71--86",
 	year	= "2014",
   key = "arimaPI",
-  url = "https://jyx.jyu.fi/dspace/handle/123456789/49048"
+  url = "http://urn.fi/URN:NBN:fi:jyu-201603141836"
 ),
 
 bibentry(
@@ -34,7 +34,7 @@ bibtype = "Incollection",
 	editor	= "Koopman, S. J. and Shephard, N.",
 	year = "2015",
 	key = "arPI",
-	url = "https://jyx.jyu.fi/dspace/handle/123456789/49075"
+	url = "http://urn.fi/URN:NBN:fi:jyu-201603141839"
 ),
 
 bibentry(

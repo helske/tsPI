@@ -37,14 +37,14 @@
 #' intervals for autoregressive models by simulation.
 #' In Siem Jan Koopman and Neil Shephard, editors,
 #' Unobserved Components and Time Series Econometrics. Oxford University Press.
-#' \url{https://jyx.jyu.fi/dspace/handle/123456789/49075}}
+#' \url{http://urn.fi/URN:NBN:fi:jyu-201603141839}}
 #'  \item{Helske, J. and Nyblom, J. (2014). Improved frequentist prediction intervals for
 #'  ARMA models by simulation.
 #'  In Johan Knif and Bernd Pape, editors,
 #' Contributions to Mathematics, Statistics, Econometrics, and Finance:
 #' essays in honour of professor Seppo Pynnönen,
 #' number 296 in Acta Wasaensia, pages 71--86. University of Vaasa.
-#' \url{https://jyx.jyu.fi/dspace/handle/123456789/49048}}
+#' \url{http://urn.fi/URN:NBN:fi:jyu-201603141836}}
 #' }
 #' @examples
 #'
