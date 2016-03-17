@@ -35,7 +35,8 @@ bibtype = "Incollection",
 	year = "2015",
 	key = "arPI",
 	url = "https://jyx.jyu.fi/dspace/handle/123456789/49075"
-)
+),
+
 bibentry(
 bibtype = "book",
   author	= "Helske, J..",
