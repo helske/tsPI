@@ -30,11 +30,9 @@
 #' @seealso \code{\link{tsPI}}, \code{\link{arima_pi}}
 #'  @references
 #' \enumerate{
-#' \item{Helske, J. and Nyblom, J. (2013). Improved frequentist prediction
-#' intervals for autoregressive models by simulation.
-#' In Siem Jan Koopman and Neil Shephard, editors,
-#' Unobserved Components and Time Series Econometrics. Oxford University Press. In press.}
-#'  \item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis, Report 152. }
+#'  \item{Helske, J. (2015). Prediction and interpolation of time series by state space models.
+#'  University of Jyväskylä. PhD thesis, Report 152.
+#'  \url{http://urn.fi/URN:NBN:fi:jyu-201603111829}}
 #' }
 #' @examples
 #'

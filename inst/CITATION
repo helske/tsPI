@@ -21,7 +21,8 @@ bibtype = "Incollection",
 	series	= "Acta Wasaensia",
 	pages	= "71--86",
 	year	= "2014",
-  key = "arPI"
+  key = "arimaPI",
+  url = "https://jyx.jyu.fi/dspace/handle/123456789/49048"
 ),
 
 bibentry(
@@ -32,7 +33,16 @@ bibtype = "Incollection",
 	publisher= "Oxford University Press",
 	editor	= "Koopman, S. J. and Shephard, N.",
 	year = "2015",
-	note	= "In press",
-	key = "arimaPI"
+	key = "arPI",
+	url = "https://jyx.jyu.fi/dspace/handle/123456789/49075"
+)
+bibentry(
+bibtype = "book",
+  author	= "Helske, J..",
+	title	= "Prediction and Interpolation of Time Series By State Space Models",
+	publisher= "University Of Jyväskylä",
+	year = "2015",
+	key = "thesis",
+	url = "http://urn.fi/URN:NBN:fi:jyu-201603111829"
 )
 )
