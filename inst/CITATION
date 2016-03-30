@@ -11,12 +11,11 @@ key = "RtsPI"
 
 bibentry(
 bibtype = "Incollection",
-  author	= "Helske, J. and Nyblom, J.",
+  author	= "Jouni Helske and Jukka Nyblom",
 	title	= "Improved frequentist prediction intervals for {ARMA} models by simulation",
-	booktitle = "Contributions to Mathematics, Statistics, Econometrics, and Finance :
-	            essays in honour of professor Seppo Pynnönen",
+	booktitle = "Contributions to Mathematics, Statistics, Econometrics, and Finance : essays in honour of professor Seppo Pynnönen",
 	publisher= "University of Vaasa",
-	editor	= "Knif, J. and Pape, B.",
+	editor	= "Johan Knif and Bernd Pape",
 	number	= "296",
 	series	= "Acta Wasaensia",
 	pages	= "71--86",
@@ -27,11 +26,11 @@ bibtype = "Incollection",
 
 bibentry(
 bibtype = "Incollection",
-  author	= "Helske, J. and Nyblom, J.",
+  author	= "Jouni Helske and Jukka Nyblom",
 	title	= "Improved Frequentist Prediction Intervals for Autoregressive Models by Simulation",
 	booktitle= "Unobserved Components and Time Series Econometrics",
 	publisher= "Oxford University Press",
-	editor	= "Koopman, S. J. and Shephard, N.",
+	editor	= "Siem Jan Koopman and Neil Shephard",
 	year = "2015",
 	key = "arPI",
 	url = "http://urn.fi/URN:NBN:fi:jyu-201603141839"
@@ -39,7 +38,7 @@ bibtype = "Incollection",
 
 bibentry(
 bibtype = "book",
-  author	= "Helske, J..",
+  author	= "Jouni Helske",
 	title	= "Prediction and Interpolation of Time Series By State Space Models",
 	publisher= "University Of Jyväskylä",
 	year = "2015",
