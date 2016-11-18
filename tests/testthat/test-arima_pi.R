@@ -60,3 +60,12 @@ test_that("arima_pi with jeffreys gives same results each time",{
   pred <- arima_pi(lh, c(1, 0, 0), nsim = 50, prior = "exact_joint")
   expect_equal(pred[1,"lwr"], 1.7381, tol = 1e-5, check.attributes = FALSE)
 })
+
+
+test_that("pure MA model works",{
+  set.seed(1)
+  pred <- arima_pi(lh, c(0, 0, 1), nsim = 50)
+})
+test_that("white noise gives error",{
+  expect_error(arima_pi(lh, c(0, 1, 0), nsim = 50))
+})

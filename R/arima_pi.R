@@ -68,7 +68,12 @@ arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = 
   distfkt <- function(a, prob, ex, sdx, w){
     sum(w * pnorm(q = a, mean = ex, sd = sdx)) - prob
   }
-
+  p <- order[1]
+  d <- order[2]
+  q <- order[3]
+  if((npar <- p + q) == 0) {
+    stop("Total number of AR and MA coefficients must be at least 1. ")
+  }
   if (level >= 1 | level < 0)
     stop("Invalid value of argument 'level'.")
   prior <- match.arg(prior,
@@ -84,10 +89,8 @@ arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = 
     stop("arima function returned non-convergence or coefficient variances smaller than 1e-7.")
   }
 
-  p <- order[1]
-  d <- order[2]
-  q <- order[3]
-  npar <- p + q
+
+ 
   psihat <- as.numeric(fit$coef[1:npar])
   psivar <- matrix(fit$var.coef[1:npar, 1:npar], npar, npar)
   psivarchol <- try(t(chol(psivar)), TRUE)
@@ -106,17 +109,20 @@ arima_pi <- function(x, order, xreg = NULL, n_ahead = 1, level = 0.95, median = 
   #stationarity
   if (p > 0) {
     w <- apply(matrix(abs(apply(cbind(rep(1, nsim),-psisim[, 1:p]), 1, polyroot)) > 1, p, nsim), 2, sum) == p
-  } else w <- rep(1, nsim)
+  } else w <- rep(TRUE, nsim)
   #invertibility?
   if (q > 0 && invertibility) {
-    w <- w * apply(matrix(abs(apply(cbind(rep(1, nsim), psisim[, (p + 1):(p + q)]),1, polyroot)) > 1, q, nsim), 2, sum) == q
+    w <- w & apply(matrix(abs(apply(cbind(rep(1, nsim), psisim[, (p + 1):(p + q)]),1, polyroot)) > 1, q, nsim), 2, sum) == q
   }
 
   x <- window(x, end = end(x) + c(0, n_ahead), extend = TRUE)
   ex <- sdx <- matrix(0,n_ahead, nsim)
 
 
-  valid <- which(w > 0)[1]
+  valid <- which(w)[1]
+  if(length(valid) == 0) {
+    stop("None of the simulated parameters satisfy stationarity and/or invertibility constraints.")
+  }
   valid_ar <- if (p > 0) psisim[valid, 1:p] else NULL
   valid_ma <- if ( q > 0) psisim[valid, (p + 1):(p + q)] else NULL
   if (is.null(xreg)) {

@@ -52,21 +52,21 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
   n_ahead = 1, level = 0.95, median = TRUE, se_limits = TRUE,
   prior = "uniform", custom_prior, custom_prior_args = NULL, nsim = 1000, inits = NULL,
   last_only = FALSE, return_weights = FALSE){
-
+  
   distfkt <- function(a, prob, ex, sdx, w){
     sum(w * pnorm(q = a, mean = ex, sd = sdx)) - prob
   }
   if(level >= 1 | level < 0)
     stop("Invalid value of argument 'level'.")
-
+  
   type <- match.arg(type)
   prior <- match.arg(prior, c("uniform", "custom"))
   if (prior == "custom" && missing(custom_prior))
     stop("Missing custom prior.")
-
+  
   n <- length(x)
   x <- window(x, end = end(x) + c(0, n_ahead), extend = TRUE)
-
+  
   if (!is.null(xreg)) {
     model <- switch(type,
       level = SSModel(x ~ xreg + SSMtrend(1, NA), H = NA),
@@ -82,9 +82,9 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
     level = 2,
     trend = 3,
     BSM = 4)
-
+  
   dx <- 1 + 0:(npar - 2) * npar
-
+  
   likfn <- function(pars, model){
     # parameters are log(standard deviation)
     model$Q[dx] <- exp(2 * pars[-1])
@@ -93,11 +93,11 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
   }
   fit <- optim(fn = likfn, par = if (is.null(inits)) log(rep(sd(x, na.rm = TRUE), npar)/100) else inits,
     method = "BFGS", hessian = TRUE, model = model, control = list(reltol= 1e-10))
-
-#   if (any(exp(2*fit$par) < 1e-7))
-#     warning("Some of the variance parameters were estimated as smaller than 1e-7.
-#       Boundaries of parameter space can cause problems in importance sampling. Consider fixing variances to zero.")
-
+  
+  #   if (any(exp(2*fit$par) < 1e-7))
+  #     warning("Some of the variance parameters were estimated as smaller than 1e-7.
+  #       Boundaries of parameter space can cause problems in importance sampling. Consider fixing variances to zero.")
+  
   psihat <- as.numeric(fit$par)
   psivarchol <- try(t(chol(solve(fit$hessian))), TRUE)
   if (inherits(psivarchol, "try-error"))
@@ -106,23 +106,25 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
   psisim <- array(rnorm(n = nsim * npar),c(nsim, npar))
   for (i in 1:nsim)
     psisim[i,] <- psihat + psivarchol %*% psisim[i, ]
-
+  
   ex <- sdx <- matrix(0,n_ahead, nsim)
-
+  
   w <- apply(psisim, 1, function(x) all(x < log(sqrt(1e7))))
-
-
+  if(sum(w) == 0) {
+    stop("None of the simulated parameters have variance smaller than 1e7.")
+  }
+  
   for (i in which(w)) {
     model$Q[dx] <- exp(2 * psisim[i, -1])
     model$H[1] <- exp(2 * psisim[i, 1])
     out <- KFS(model, filtering = "mean", smoothing = "none")
-
+    
     ex[1:n_ahead,i] <- out$m[(n + 1):(n + n_ahead)]
     sdx[1:n_ahead,i] <- sqrt(out$P_mu[(n + 1):(n + n_ahead)] + model$H[1])
-
+    
     weight <- exp(out$logLik + fit$value)  /
       exp(-0.5 * t(psisim[i,] - psihat) %*% psivarinv %*% (psisim[i, ] - psihat))
-
+    
     w[i] <- weight * switch(prior,
       uniform = 1,
       custom = do.call(custom_prior, list(psisim[i, ], custom_prior_args)))
@@ -130,7 +132,7 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
   w <- w/sum(w)
   out <- ts(matrix(NA, n_ahead, 2 + median + 2 * se_limits), end = end(model$y), frequency = frequency(model$y))
   colnames(out) <- c(if (median) "median", "lwr", "upr", if (se_limits) c("se_lwr", "se_upr"))
-
+  
   if (sum(is.na(w)) == 0) {
     nz_w <- w[w != 0]
     for (j in 1:n_ahead) {
@@ -155,8 +157,8 @@ struct_pi <- function(x, type = c("level", "trend", "BSM"), xreg = NULL,
       }
     }
   } else stop("NA values in weights.")
-
-
+  
+  
   if (return_weights)
     out <- list(pred = out, weights = w)
   out
