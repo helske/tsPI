@@ -23,7 +23,7 @@ approx_joint_jeffreys<-function(psi, xreg = NULL, p, q, n){
   phi <- if (p > 0) psi[1:p] else NULL
   theta <- if (q > 0) psi[p + 1:q] else NULL
   chol_im <- try(chol(information_arma(phi, theta)), silent = TRUE)
-  if (inherits(chol_im, "try-error")) {
+  if (!inherits(chol_im, "try-error")) {
     sqrt_det <- prod(diag(chol_im))
     if (!is.null(xreg)){
       sqrt_det * sqrt(det(t(cbind(1, xreg)) %*% solve(toeplitz(acv_arma(phi, theta, n = n)),cbind(1,xreg))))
@@ -39,7 +39,7 @@ approx_marginal_jeffreys<-function(psi, p, q){
   phi <- if (p > 0) psi[1:p] else NULL
   theta <- if (q > 0) psi[p + 1:q] else NULL
   chol_im <- try(chol(information_arma(phi, theta)), silent = TRUE)
-  if (inherits(chol_im, "try-error")) {
+  if (!inherits(chol_im, "try-error")) {
     prod(diag(chol_im))
   } else 0
 }

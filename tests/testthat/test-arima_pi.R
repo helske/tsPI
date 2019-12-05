@@ -66,7 +66,7 @@ test_that("arima_pi with jeffreys gives same results each time",{
 
 test_that("pure MA model works",{
   set.seed(1)
-  pred <- arima_pi(lh, c(0, 0, 1), nsim = 50)
+  expect_error(pred <- arima_pi(lh, c(0, 0, 1), nsim = 50), NA)
 })
 test_that("white noise gives error",{
   expect_error(arima_pi(lh, c(0, 1, 0), nsim = 50))
