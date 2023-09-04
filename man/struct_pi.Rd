@@ -4,10 +4,22 @@
 \alias{struct_pi}
 \title{Prediction Intervals for Structural Time Series with Exogenous Variables Using Importance Sampling}
 \usage{
-struct_pi(x, type = c("level", "trend", "BSM"), xreg = NULL, n_ahead = 1,
-  level = 0.95, median = TRUE, se_limits = TRUE, prior = "uniform",
-  custom_prior, custom_prior_args = NULL, nsim = 1000, inits = NULL,
-  last_only = FALSE, return_weights = FALSE)
+struct_pi(
+  x,
+  type = c("level", "trend", "BSM"),
+  xreg = NULL,
+  n_ahead = 1,
+  level = 0.95,
+  median = TRUE,
+  se_limits = TRUE,
+  prior = "uniform",
+  custom_prior,
+  custom_prior_args = NULL,
+  nsim = 1000,
+  inits = NULL,
+  last_only = FALSE,
+  return_weights = FALSE
+)
 }
 \arguments{
 \item{x}{vector containing the time series}
@@ -74,4 +86,3 @@ ts.plot(ts.union(Nile,pred_StructTS, pred[,1:3]), col = c(1,2,2,2,3,3,3),
  \url{http://urn.fi/URN:NBN:fi:jyu-201603111829}}
 }
 }
-

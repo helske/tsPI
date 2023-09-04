@@ -23,4 +23,3 @@ Function \code{dacv_arma} computes the partial derivatives of theoretical autoco
 \seealso{
 \code{\link{acv_arma}}.
 }
-

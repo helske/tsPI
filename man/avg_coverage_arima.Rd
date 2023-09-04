@@ -5,9 +5,19 @@
 \title{Compute the average coverage of the prediction intervals computed by
 naive plug-in method and \code{\link{arima_pi}}}
 \usage{
-avg_coverage_arima(phi = NULL, theta = NULL, d = 0, n, n_ahead = 1,
-  nsim2, nsim = 100, level = 0.95, prior = "uniform",
-  return_all_coverages = FALSE, ...)
+avg_coverage_arima(
+  phi = NULL,
+  theta = NULL,
+  d = 0,
+  n,
+  n_ahead = 1,
+  nsim2,
+  nsim = 100,
+  level = 0.95,
+  prior = "uniform",
+  return_all_coverages = FALSE,
+  ...
+)
 }
 \arguments{
 \item{phi}{vector containing the AR parameters}
@@ -53,4 +63,3 @@ avg_coverage_arima(phi = 0.9, theta = -0.6, n = 50, n_ahead = 10, nsim2 = 100)
 \seealso{
 \code{\link{arima_pi}}.
 }
-

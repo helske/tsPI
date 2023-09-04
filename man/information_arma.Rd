@@ -28,4 +28,3 @@ MA coefficients differ in sign compared to \code{InformationMatrixARMA}.
 Analysis 52(4) URL http://dx.doi.org/10.1016/j.csda.2007.07.020}
 }
 }
-

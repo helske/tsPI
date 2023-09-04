@@ -1,3 +1,6 @@
+Changes from version 1.0.3 to 1.0.4:
+  * Changed Fortran file extensions from f95 to f90 for portability reasons.
+
 Changes from version 1.0.2 to 1.0.3:
   * Fixed a bug which made pure MA models to throw an error.
   * Fixed issue with try-error due to upcoming changes in R4.0.0.

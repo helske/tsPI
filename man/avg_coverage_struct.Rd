@@ -5,9 +5,19 @@
 \title{Compute the average coverage of the prediction intervals computed by \code{\link{struct_pi}}
 and plug-in method}
 \usage{
-avg_coverage_struct(type = c("level", "trend", "BSM"), sds, frequency = 1,
-  n, n_ahead = 1, nsim2, nsim = 100, level = 0.95, prior = "uniform",
-  return_all_coverages = FALSE, ...)
+avg_coverage_struct(
+  type = c("level", "trend", "BSM"),
+  sds,
+  frequency = 1,
+  n,
+  n_ahead = 1,
+  nsim2,
+  nsim = 100,
+  level = 0.95,
+  prior = "uniform",
+  return_all_coverages = FALSE,
+  ...
+)
 }
 \arguments{
 \item{type}{Type of model. See \code{\link{struct_pi}}.}
@@ -58,4 +68,3 @@ avg_coverage_struct(type = "BSM", sds = c(1, 1, 0.1, 10),
 \seealso{
 \code{\link{struct_pi}}.
 }
-

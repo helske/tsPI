@@ -4,10 +4,23 @@
 \alias{arima_pi}
 \title{Prediction Intervals for ARIMA Processes with Exogenous Variables Using Importance Sampling}
 \usage{
-arima_pi(x, order, xreg = NULL, n_ahead = 1, level = 0.95,
-  median = TRUE, se_limits = TRUE, prior = "uniform", custom_prior,
-  custom_prior_args = NULL, nsim = 1000, invertibility = FALSE,
-  last_only = FALSE, return_weights = FALSE, ...)
+arima_pi(
+  x,
+  order,
+  xreg = NULL,
+  n_ahead = 1,
+  level = 0.95,
+  median = TRUE,
+  se_limits = TRUE,
+  prior = "uniform",
+  custom_prior,
+  custom_prior_args = NULL,
+  nsim = 1000,
+  invertibility = FALSE,
+  last_only = FALSE,
+  return_weights = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{vector containing the time series}
@@ -89,4 +102,3 @@ ts.plot(ts.union(x,pred_arima, pred[,1:3]), col = c(1,2,2,2,3,3,3),
 \seealso{
 \code{\link{tsPI}}, \code{\link{struct_pi}}
 }
-

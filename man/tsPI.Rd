@@ -3,7 +3,6 @@
 \docType{package}
 \name{tsPI}
 \alias{tsPI}
-\alias{tsPI-package}
 \title{Improved Prediction Intervals for ARIMA Processes and Structural Time Series}
 \description{
 Package tsPI computes prediction intervals for ARIMA and structural
@@ -31,4 +30,3 @@ number 296 in Acta Wasaensia, pages 71–86. University of Vaasa.}
 \item{Helske, J. (2015). Prediction and interpolation of time series by state space models. University of Jyväskylä. PhD thesis, Report 152. }
 }
 }
-

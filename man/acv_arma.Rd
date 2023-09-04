@@ -32,4 +32,3 @@ all.equal(acv/acv[1], answer)
 \seealso{
 \code{\link{dacv_arma}}.
 }
-
