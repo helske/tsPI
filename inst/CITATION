@@ -5,7 +5,7 @@ title = "{tsPI}: Bayesian Prediction Intervals for ARIMA Processes and Structura
 author = "Jouni Helske",
 year = sub("-.*", "", meta$Date),
 note = sprintf("R package version %s", meta$Version),
-url = "https://github.com/helske/arimaPI",
+url = "https://github.com/helske/tsPI",
 key = "RtsPI"
 ),
 
@@ -21,7 +21,7 @@ bibtype = "Incollection",
 	pages	= "71--86",
 	year	= "2014",
   key = "arimaPI",
-  url = "http://urn.fi/URN:NBN:fi:jyu-201603141836"
+  url = "https://urn.fi/URN:NBN:fi:jyu-201603141836"
 ),
 
 bibentry(
@@ -33,7 +33,7 @@ bibtype = "Incollection",
 	editor	= "Siem Jan Koopman and Neil Shephard",
 	year = "2015",
 	key = "arPI",
-	url = "http://urn.fi/URN:NBN:fi:jyu-201603141839"
+	url = "https://urn.fi/URN:NBN:fi:jyu-201603141839"
 ),
 
 bibentry(
@@ -43,6 +43,6 @@ bibtype = "book",
 	publisher= "University Of Jyväskylä",
 	year = "2015",
 	key = "thesis",
-	url = "http://urn.fi/URN:NBN:fi:jyu-201603111829"
+	url = "https://urn.fi/URN:NBN:fi:jyu-201603111829"
 )
 )

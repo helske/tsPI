@@ -83,6 +83,6 @@ ts.plot(ts.union(Nile,pred_StructTS, pred[,1:3]), col = c(1,2,2,2,3,3,3),
 \enumerate{
  \item{Helske, J. (2015). Prediction and interpolation of time series by state space models.
  University of Jyväskylä. PhD thesis, Report 152.
- \url{http://urn.fi/URN:NBN:fi:jyu-201603111829}}
+ \url{https://urn.fi/URN:NBN:fi:jyu-201603111829}}
 }
 }
